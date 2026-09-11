@@ -1,0 +1,350 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "assessment-result.schema.json",
+  "title": "Architecture assessment result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "overall_status",
+    "critical_gates",
+    "adjusted_domain_weights",
+    "domains",
+    "scoring"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "2.0"
+    },
+    "overall_status": {
+      "enum": [
+        "CRITICAL_GATE_FAILURE",
+        "ASSESSED",
+        "PARTIAL_ASSESSMENT"
+      ]
+    },
+    "critical_gates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "security",
+        "data_integrity",
+        "recovery",
+        "safety_compliance"
+      ],
+      "properties": {
+        "security": {
+          "$ref": "#/$defs/gateStatus"
+        },
+        "data_integrity": {
+          "$ref": "#/$defs/gateStatus"
+        },
+        "recovery": {
+          "$ref": "#/$defs/gateStatus"
+        },
+        "safety_compliance": {
+          "$ref": "#/$defs/gateStatus"
+        }
+      }
+    },
+    "adjusted_domain_weights": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H"
+      ],
+      "properties": {
+        "A": {
+          "$ref": "#/$defs/percentage"
+        },
+        "B": {
+          "$ref": "#/$defs/percentage"
+        },
+        "C": {
+          "$ref": "#/$defs/percentage"
+        },
+        "D": {
+          "$ref": "#/$defs/percentage"
+        },
+        "E": {
+          "$ref": "#/$defs/percentage"
+        },
+        "F": {
+          "$ref": "#/$defs/percentage"
+        },
+        "G": {
+          "$ref": "#/$defs/percentage"
+        },
+        "H": {
+          "$ref": "#/$defs/percentage"
+        }
+      }
+    },
+    "domains": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H"
+      ],
+      "properties": {
+        "A": {
+          "$ref": "#/$defs/domain"
+        },
+        "B": {
+          "$ref": "#/$defs/domain"
+        },
+        "C": {
+          "$ref": "#/$defs/domain"
+        },
+        "D": {
+          "$ref": "#/$defs/domain"
+        },
+        "E": {
+          "$ref": "#/$defs/domain"
+        },
+        "F": {
+          "$ref": "#/$defs/domain"
+        },
+        "G": {
+          "$ref": "#/$defs/domain"
+        },
+        "H": {
+          "$ref": "#/$defs/domain"
+        }
+      }
+    },
+    "scoring": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "kind",
+        "reasons",
+        "coverage_percent",
+        "composite",
+        "mean_health",
+        "label"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "not_requested",
+            "withheld",
+            "computed"
+          ]
+        },
+        "kind": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "Architecture Health",
+            "Design Readiness",
+            null
+          ]
+        },
+        "reasons": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "coverage_percent": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "composite": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 100
+        },
+        "mean_health": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 4
+        },
+        "label": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "Exemplary",
+            "Healthy",
+            "Adequate",
+            "Fragile",
+            "Failing",
+            null
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "not_requested"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "type": "null"
+              },
+              "reasons": {
+                "maxItems": 0
+              },
+              "composite": {
+                "type": "null"
+              },
+              "label": {
+                "type": "null"
+              },
+              "mean_health": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "withheld"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "enum": [
+                  "Architecture Health",
+                  "Design Readiness"
+                ]
+              },
+              "reasons": {
+                "minItems": 1
+              },
+              "composite": {
+                "type": "null"
+              },
+              "label": {
+                "type": "null"
+              },
+              "mean_health": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "computed"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "enum": [
+                  "Architecture Health",
+                  "Design Readiness"
+                ]
+              },
+              "reasons": {
+                "maxItems": 0
+              },
+              "composite": {
+                "type": "integer"
+              },
+              "label": {
+                "type": "string"
+              },
+              "mean_health": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "gateStatus": {
+      "enum": [
+        "PASS",
+        "FAIL",
+        "UNKNOWN",
+        "NOT_APPLICABLE"
+      ]
+    },
+    "percentage": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "domain": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "adjusted_weight",
+        "coverage_percent",
+        "unknown_percent",
+        "health_score"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "adjusted_weight": {
+          "$ref": "#/$defs/percentage"
+        },
+        "coverage_percent": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "unknown_percent": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "health_score": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 100
+        }
+      }
+    }
+  }
+}

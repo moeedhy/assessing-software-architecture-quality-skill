@@ -1,0 +1,7 @@
+interface:
+  display_name: "Architecture Quality Assessment"
+  short_description: "Evidence-led architecture decisions and reviews"
+  default_prompt: "Use $assessing-software-architecture-quality to assess this system and recommend the smallest evidence-backed improvement."
+
+policy:
+  allow_implicit_invocation: true

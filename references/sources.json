@@ -1,0 +1,126 @@
+{
+  "schema_version": "1.0",
+  "reviewed_at": "2026-09-04",
+  "sources": [
+    {
+      "id": "agent-skills-spec",
+      "title": "Agent Skills Specification",
+      "url": "https://agentskills.io/specification",
+      "authority": "Agent Skills open specification",
+      "stability": "stable",
+      "last_verified": "2026-09-04"
+    },
+    {
+      "id": "openai-build-skills",
+      "title": "OpenAI Build Skills",
+      "url": "https://learn.chatgpt.com/docs/build-skills",
+      "authority": "OpenAI official documentation",
+      "stability": "volatile",
+      "last_verified": "2026-09-04"
+    },
+    {
+      "id": "openai-latest-model",
+      "title": "OpenAI Latest Model Guide",
+      "url": "https://developers.openai.com/api/docs/guides/latest-model",
+      "authority": "OpenAI official documentation",
+      "stability": "volatile",
+      "last_verified": "2026-09-04"
+    },
+    {
+      "id": "openai-evals",
+      "title": "OpenAI Evaluation Best Practices",
+      "url": "https://platform.openai.com/docs/guides/evaluation-best-practices",
+      "authority": "OpenAI official documentation",
+      "stability": "volatile",
+      "last_verified": "2026-09-04"
+    },
+    {
+      "id": "anthropic-agent-skills",
+      "title": "Equipping Agents for the Real World with Agent Skills",
+      "url": "https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills",
+      "authority": "Anthropic engineering",
+      "stability": "stable",
+      "last_verified": "2026-09-04"
+    },
+    {
+      "id": "anthropic-effective-agents",
+      "title": "Building Effective Agents",
+      "url": "https://www.anthropic.com/engineering/building-effective-agents",
+      "authority": "Anthropic engineering",
+      "stability": "stable",
+      "last_verified": "2026-09-04"
+    },
+    {
+      "id": "iso-25010-2023",
+      "title": "ISO/IEC 25010:2023 Product Quality Model",
+      "url": "https://www.iso.org/standard/78176.html",
+      "authority": "ISO",
+      "stability": "stable",
+      "last_verified": "2026-09-04"
+    },
+    {
+      "id": "sonar-cognitive-complexity",
+      "title": "Cognitive Complexity",
+      "url": "https://www.sonarsource.com/resources/cognitive-complexity/",
+      "authority": "SonarSource",
+      "stability": "stable",
+      "last_verified": "2026-09-04"
+    },
+    {
+      "id": "dora-metrics",
+      "title": "DORA Software Delivery Performance Metrics",
+      "url": "https://dora.dev/guides/dora-metrics/",
+      "authority": "DORA official guidance",
+      "stability": "volatile",
+      "last_verified": "2026-09-04"
+    },
+    {
+      "id": "otel-signals",
+      "title": "OpenTelemetry Signals",
+      "url": "https://opentelemetry.io/docs/concepts/signals/",
+      "authority": "OpenTelemetry official documentation",
+      "stability": "volatile",
+      "last_verified": "2026-09-04"
+    },
+    {
+      "id": "aws-fault-isolation",
+      "title": "Use Fault Isolation to Protect Your Workload",
+      "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/use-fault-isolation-to-protect-your-workload.html",
+      "authority": "AWS Well-Architected Framework",
+      "stability": "stable",
+      "last_verified": "2026-09-04"
+    },
+    {
+      "id": "azure-microservices",
+      "title": "Microservices Architecture Style",
+      "url": "https://learn.microsoft.com/en-us/azure/architecture/microservices/",
+      "authority": "Microsoft Azure Architecture Center",
+      "stability": "volatile",
+      "last_verified": "2026-09-04"
+    },
+    {
+      "id": "owasp-threat-modeling",
+      "title": "OWASP Threat Modeling",
+      "url": "https://owasp.org/www-community/Threat_Modeling",
+      "authority": "OWASP",
+      "stability": "stable",
+      "last_verified": "2026-09-04"
+    },
+    {
+      "id": "nist-ssdf-12-draft",
+      "title": "NIST SP 800-218 Rev.1 Initial Public Draft, SSDF 1.2",
+      "url": "https://csrc.nist.gov/pubs/sp/800/218/r1/ipd",
+      "authority": "NIST",
+      "stability": "draft",
+      "last_verified": "2026-09-04"
+    },
+    {
+      "id": "slsa-spec",
+      "title": "SLSA Supply-chain Levels for Software Artifacts",
+      "url": "https://slsa.dev/spec/",
+      "authority": "OpenSSF SLSA specification",
+      "stability": "volatile",
+      "last_verified": "2026-09-07"
+    }
+  ]
+}

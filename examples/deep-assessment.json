@@ -1,0 +1,677 @@
+{
+  "schema_version": "2.0",
+  "mode": "REVIEW",
+  "depth": "DEEP",
+  "score_requested": true,
+  "context_profiles": [
+    "fast-changing-product"
+  ],
+  "custom_domain_weights": null,
+  "evidence": [
+    {
+      "id": "EV-CODE-001",
+      "source": "repository",
+      "locator": "src/checkout/, src/invoice/, src/promotion/",
+      "scope": "pricing rule implementations",
+      "time_window": null,
+      "evidence_kind": "OBSERVATION",
+      "claim_status": "OBSERVED",
+      "confidence": "HIGH",
+      "factor_ids": [
+        "AQ-A01",
+        "AQ-A02",
+        "AQ-A03",
+        "AQ-A04",
+        "AQ-B01",
+        "AQ-B02",
+        "AQ-B03",
+        "AQ-B04",
+        "AQ-B05",
+        "AQ-B06",
+        "AQ-B07",
+        "AQ-B08",
+        "AQ-B09",
+        "AQ-B10",
+        "AQ-B11",
+        "AQ-B12"
+      ]
+    },
+    {
+      "id": "EV-GIT-001",
+      "source": "version-control history",
+      "locator": "git log --since=2026-06-01 -- src/**/pricing*",
+      "scope": "pricing change history",
+      "time_window": "2026-06-01/2026-09-01",
+      "evidence_kind": "MEASUREMENT",
+      "claim_status": "OBSERVED",
+      "confidence": "HIGH",
+      "factor_ids": [
+        "AQ-C01",
+        "AQ-C02",
+        "AQ-C03",
+        "AQ-C04",
+        "AQ-C05",
+        "AQ-C07",
+        "AQ-C08",
+        "AQ-C09"
+      ]
+    },
+    {
+      "id": "EV-CHANGE-001",
+      "source": "work item",
+      "locator": "JIRA CHK-4471 diff (representative promotion change)",
+      "scope": "change amplification sample",
+      "time_window": null,
+      "evidence_kind": "MEASUREMENT",
+      "claim_status": "OBSERVED",
+      "confidence": "MEDIUM",
+      "factor_ids": [
+        "AQ-C01",
+        "AQ-C02",
+        "AQ-C03",
+        "AQ-C04",
+        "AQ-C05",
+        "AQ-C07",
+        "AQ-C08",
+        "AQ-C09"
+      ]
+    },
+    {
+      "id": "EV-TEST-001",
+      "source": "test suite",
+      "locator": "test/pricing/conftest.py:1-88",
+      "scope": "pricing test setup",
+      "time_window": null,
+      "evidence_kind": "OBSERVATION",
+      "claim_status": "OBSERVED",
+      "confidence": "HIGH",
+      "factor_ids": [
+        "AQ-F01",
+        "AQ-F02",
+        "AQ-F03",
+        "AQ-F04",
+        "AQ-F05"
+      ]
+    },
+    {
+      "id": "EV-CI-001",
+      "source": "delivery records",
+      "locator": "CI pipeline checkout-release, last 90 days",
+      "scope": "release and recovery metrics",
+      "time_window": "2026-06-09/2026-09-07",
+      "evidence_kind": "MEASUREMENT",
+      "claim_status": "OBSERVED",
+      "confidence": "MEDIUM",
+      "factor_ids": [
+        "AQ-F01",
+        "AQ-F02",
+        "AQ-F03",
+        "AQ-F04",
+        "AQ-F05"
+      ]
+    },
+    {
+      "id": "EV-RUNTIME-001",
+      "source": "observability",
+      "locator": "checkout latency dashboard DB-119",
+      "scope": "p99 checkout latency",
+      "time_window": "2026-06-01/2026-09-01",
+      "evidence_kind": "MEASUREMENT",
+      "claim_status": "OBSERVED",
+      "confidence": "HIGH",
+      "factor_ids": [
+        "AQ-E01",
+        "AQ-E02",
+        "AQ-E03",
+        "AQ-E04"
+      ]
+    },
+    {
+      "id": "EV-DATA-001",
+      "source": "database",
+      "locator": "schema catalog: orders, pricing_rules",
+      "scope": "write ownership of pricing tables",
+      "time_window": null,
+      "evidence_kind": "OBSERVATION",
+      "claim_status": "OBSERVED",
+      "confidence": "HIGH",
+      "factor_ids": [
+        "AQ-D01",
+        "AQ-D02",
+        "AQ-D04",
+        "AQ-D05"
+      ]
+    },
+    {
+      "id": "EV-SEC-001",
+      "source": "threat model",
+      "locator": "THREAT-2026-03 checkout review",
+      "scope": "checkout trust boundaries",
+      "time_window": null,
+      "evidence_kind": "DOCUMENTED_CLAIM",
+      "claim_status": "INFERRED",
+      "confidence": "MEDIUM",
+      "factor_ids": [
+        "AQ-H01",
+        "AQ-H02",
+        "AQ-H03",
+        "AQ-H04",
+        "AQ-H05",
+        "AQ-H06"
+      ]
+    },
+    {
+      "id": "EV-DEP-001",
+      "source": "build system",
+      "locator": "release pipeline config .ci/release.yaml:1-140",
+      "scope": "artifact build and signing path",
+      "time_window": null,
+      "evidence_kind": "OBSERVATION",
+      "claim_status": "OBSERVED",
+      "confidence": "HIGH",
+      "factor_ids": [
+        "AQ-H01",
+        "AQ-H02",
+        "AQ-H03",
+        "AQ-H04",
+        "AQ-H05",
+        "AQ-H06"
+      ]
+    },
+    {
+      "id": "EV-ORG-001",
+      "source": "service catalog",
+      "locator": "team ownership registry, checkout domain",
+      "scope": "team and service ownership",
+      "time_window": null,
+      "evidence_kind": "DOCUMENTED_CLAIM",
+      "claim_status": "OBSERVED",
+      "confidence": "MEDIUM",
+      "factor_ids": [
+        "AQ-G01",
+        "AQ-G02",
+        "AQ-G03"
+      ]
+    }
+  ],
+  "factors": [
+    {
+      "id": "AQ-A01",
+      "applicability": "ASSESSED",
+      "health": 1,
+      "confidence": "HIGH",
+      "evidence_ids": [
+        "EV-CODE-001"
+      ]
+    },
+    {
+      "id": "AQ-A02",
+      "applicability": "ASSESSED",
+      "health": 2,
+      "confidence": "HIGH",
+      "evidence_ids": [
+        "EV-CODE-001"
+      ]
+    },
+    {
+      "id": "AQ-A03",
+      "applicability": "ASSESSED",
+      "health": 2,
+      "confidence": "HIGH",
+      "evidence_ids": [
+        "EV-CODE-001"
+      ]
+    },
+    {
+      "id": "AQ-A04",
+      "applicability": "ASSESSED",
+      "health": 2,
+      "confidence": "HIGH",
+      "evidence_ids": [
+        "EV-CODE-001"
+      ]
+    },
+    {
+      "id": "AQ-B01",
+      "applicability": "ASSESSED",
+      "health": 1,
+      "confidence": "HIGH",
+      "evidence_ids": [
+        "EV-CODE-001"
+      ]
+    },
+    {
+      "id": "AQ-B02",
+      "applicability": "ASSESSED",
+      "health": 2,
+      "confidence": "HIGH",
+      "evidence_ids": [
+        "EV-CODE-001"
+      ]
+    },
+    {
+      "id": "AQ-B03",
+      "applicability": "ASSESSED",
+      "health": 2,
+      "confidence": "HIGH",
+      "evidence_ids": [
+        "EV-CODE-001"
+      ]
+    },
+    {
+      "id": "AQ-B04",
+      "applicability": "ASSESSED",
+      "health": 2,
+      "confidence": "HIGH",
+      "evidence_ids": [
+        "EV-CODE-001"
+      ]
+    },
+    {
+      "id": "AQ-B05",
+      "applicability": "ASSESSED",
+      "health": 2,
+      "confidence": "HIGH",
+      "evidence_ids": [
+        "EV-CODE-001"
+      ]
+    },
+    {
+      "id": "AQ-B06",
+      "applicability": "ASSESSED",
+      "health": 2,
+      "confidence": "HIGH",
+      "evidence_ids": [
+        "EV-CODE-001"
+      ]
+    },
+    {
+      "id": "AQ-B07",
+      "applicability": "ASSESSED",
+      "health": 3,
+      "confidence": "HIGH",
+      "evidence_ids": [
+        "EV-CODE-001"
+      ]
+    },
+    {
+      "id": "AQ-B08",
+      "applicability": "ASSESSED",
+      "health": 3,
+      "confidence": "HIGH",
+      "evidence_ids": [
+        "EV-CODE-001"
+      ]
+    },
+    {
+      "id": "AQ-B09",
+      "applicability": "ASSESSED",
+      "health": 2,
+      "confidence": "HIGH",
+      "evidence_ids": [
+        "EV-CODE-001"
+      ]
+    },
+    {
+      "id": "AQ-B10",
+      "applicability": "ASSESSED",
+      "health": 2,
+      "confidence": "HIGH",
+      "evidence_ids": [
+        "EV-CODE-001"
+      ]
+    },
+    {
+      "id": "AQ-B11",
+      "applicability": "ASSESSED",
+      "health": 2,
+      "confidence": "HIGH",
+      "evidence_ids": [
+        "EV-CODE-001"
+      ]
+    },
+    {
+      "id": "AQ-B12",
+      "applicability": "ASSESSED",
+      "health": 2,
+      "confidence": "HIGH",
+      "evidence_ids": [
+        "EV-CODE-001"
+      ]
+    },
+    {
+      "id": "AQ-C01",
+      "applicability": "ASSESSED",
+      "health": 1,
+      "confidence": "HIGH",
+      "evidence_ids": [
+        "EV-GIT-001",
+        "EV-CHANGE-001"
+      ]
+    },
+    {
+      "id": "AQ-C02",
+      "applicability": "ASSESSED",
+      "health": 1,
+      "confidence": "HIGH",
+      "evidence_ids": [
+        "EV-GIT-001",
+        "EV-CHANGE-001"
+      ]
+    },
+    {
+      "id": "AQ-C03",
+      "applicability": "ASSESSED",
+      "health": 2,
+      "confidence": "HIGH",
+      "evidence_ids": [
+        "EV-GIT-001",
+        "EV-CHANGE-001"
+      ]
+    },
+    {
+      "id": "AQ-C04",
+      "applicability": "ASSESSED",
+      "health": 2,
+      "confidence": "HIGH",
+      "evidence_ids": [
+        "EV-GIT-001",
+        "EV-CHANGE-001"
+      ]
+    },
+    {
+      "id": "AQ-C05",
+      "applicability": "ASSESSED",
+      "health": 2,
+      "confidence": "HIGH",
+      "evidence_ids": [
+        "EV-GIT-001",
+        "EV-CHANGE-001"
+      ]
+    },
+    {
+      "id": "AQ-C06",
+      "applicability": "UNKNOWN",
+      "health": null,
+      "confidence": "UNKNOWN",
+      "evidence_ids": []
+    },
+    {
+      "id": "AQ-C07",
+      "applicability": "ASSESSED",
+      "health": 1,
+      "confidence": "HIGH",
+      "evidence_ids": [
+        "EV-GIT-001",
+        "EV-CHANGE-001"
+      ]
+    },
+    {
+      "id": "AQ-C08",
+      "applicability": "ASSESSED",
+      "health": 2,
+      "confidence": "HIGH",
+      "evidence_ids": [
+        "EV-GIT-001",
+        "EV-CHANGE-001"
+      ]
+    },
+    {
+      "id": "AQ-C09",
+      "applicability": "ASSESSED",
+      "health": 1,
+      "confidence": "HIGH",
+      "evidence_ids": [
+        "EV-GIT-001",
+        "EV-CHANGE-001"
+      ]
+    },
+    {
+      "id": "AQ-D01",
+      "applicability": "ASSESSED",
+      "health": 2,
+      "confidence": "MEDIUM",
+      "evidence_ids": [
+        "EV-DATA-001"
+      ]
+    },
+    {
+      "id": "AQ-D02",
+      "applicability": "ASSESSED",
+      "health": 2,
+      "confidence": "MEDIUM",
+      "evidence_ids": [
+        "EV-DATA-001"
+      ]
+    },
+    {
+      "id": "AQ-D03",
+      "applicability": "NOT_APPLICABLE",
+      "health": null,
+      "confidence": "UNKNOWN",
+      "evidence_ids": []
+    },
+    {
+      "id": "AQ-D04",
+      "applicability": "ASSESSED",
+      "health": 2,
+      "confidence": "MEDIUM",
+      "evidence_ids": [
+        "EV-DATA-001"
+      ]
+    },
+    {
+      "id": "AQ-D05",
+      "applicability": "ASSESSED",
+      "health": 3,
+      "confidence": "MEDIUM",
+      "evidence_ids": [
+        "EV-DATA-001"
+      ]
+    },
+    {
+      "id": "AQ-E01",
+      "applicability": "ASSESSED",
+      "health": 3,
+      "confidence": "HIGH",
+      "evidence_ids": [
+        "EV-RUNTIME-001"
+      ]
+    },
+    {
+      "id": "AQ-E02",
+      "applicability": "ASSESSED",
+      "health": 3,
+      "confidence": "HIGH",
+      "evidence_ids": [
+        "EV-RUNTIME-001"
+      ]
+    },
+    {
+      "id": "AQ-E03",
+      "applicability": "ASSESSED",
+      "health": 3,
+      "confidence": "HIGH",
+      "evidence_ids": [
+        "EV-RUNTIME-001"
+      ]
+    },
+    {
+      "id": "AQ-E04",
+      "applicability": "ASSESSED",
+      "health": 3,
+      "confidence": "HIGH",
+      "evidence_ids": [
+        "EV-RUNTIME-001"
+      ]
+    },
+    {
+      "id": "AQ-E05",
+      "applicability": "UNKNOWN",
+      "health": null,
+      "confidence": "UNKNOWN",
+      "evidence_ids": []
+    },
+    {
+      "id": "AQ-F01",
+      "applicability": "ASSESSED",
+      "health": 1,
+      "confidence": "HIGH",
+      "evidence_ids": [
+        "EV-TEST-001",
+        "EV-CI-001"
+      ]
+    },
+    {
+      "id": "AQ-F02",
+      "applicability": "ASSESSED",
+      "health": 3,
+      "confidence": "HIGH",
+      "evidence_ids": [
+        "EV-TEST-001",
+        "EV-CI-001"
+      ]
+    },
+    {
+      "id": "AQ-F03",
+      "applicability": "ASSESSED",
+      "health": 2,
+      "confidence": "HIGH",
+      "evidence_ids": [
+        "EV-TEST-001",
+        "EV-CI-001"
+      ]
+    },
+    {
+      "id": "AQ-F04",
+      "applicability": "ASSESSED",
+      "health": 2,
+      "confidence": "HIGH",
+      "evidence_ids": [
+        "EV-TEST-001",
+        "EV-CI-001"
+      ]
+    },
+    {
+      "id": "AQ-F05",
+      "applicability": "ASSESSED",
+      "health": 2,
+      "confidence": "HIGH",
+      "evidence_ids": [
+        "EV-TEST-001",
+        "EV-CI-001"
+      ]
+    },
+    {
+      "id": "AQ-G01",
+      "applicability": "ASSESSED",
+      "health": 1,
+      "confidence": "MEDIUM",
+      "evidence_ids": [
+        "EV-ORG-001"
+      ]
+    },
+    {
+      "id": "AQ-G02",
+      "applicability": "ASSESSED",
+      "health": 2,
+      "confidence": "MEDIUM",
+      "evidence_ids": [
+        "EV-ORG-001"
+      ]
+    },
+    {
+      "id": "AQ-G03",
+      "applicability": "ASSESSED",
+      "health": 2,
+      "confidence": "MEDIUM",
+      "evidence_ids": [
+        "EV-ORG-001"
+      ]
+    },
+    {
+      "id": "AQ-H01",
+      "applicability": "ASSESSED",
+      "health": 2,
+      "confidence": "MEDIUM",
+      "evidence_ids": [
+        "EV-SEC-001",
+        "EV-DEP-001"
+      ]
+    },
+    {
+      "id": "AQ-H02",
+      "applicability": "ASSESSED",
+      "health": 3,
+      "confidence": "MEDIUM",
+      "evidence_ids": [
+        "EV-SEC-001",
+        "EV-DEP-001"
+      ]
+    },
+    {
+      "id": "AQ-H03",
+      "applicability": "ASSESSED",
+      "health": 3,
+      "confidence": "MEDIUM",
+      "evidence_ids": [
+        "EV-SEC-001",
+        "EV-DEP-001"
+      ]
+    },
+    {
+      "id": "AQ-H04",
+      "applicability": "ASSESSED",
+      "health": 2,
+      "confidence": "MEDIUM",
+      "evidence_ids": [
+        "EV-SEC-001",
+        "EV-DEP-001"
+      ]
+    },
+    {
+      "id": "AQ-H05",
+      "applicability": "ASSESSED",
+      "health": 1,
+      "confidence": "MEDIUM",
+      "evidence_ids": [
+        "EV-SEC-001",
+        "EV-DEP-001"
+      ]
+    },
+    {
+      "id": "AQ-H06",
+      "applicability": "ASSESSED",
+      "health": 2,
+      "confidence": "MEDIUM",
+      "evidence_ids": [
+        "EV-SEC-001",
+        "EV-DEP-001"
+      ]
+    }
+  ],
+  "gates": {
+    "security": {
+      "status": "PASS",
+      "evidence_ids": [
+        "EV-SEC-001"
+      ]
+    },
+    "data_integrity": {
+      "status": "PASS",
+      "evidence_ids": [
+        "EV-DATA-001"
+      ]
+    },
+    "recovery": {
+      "status": "PASS",
+      "evidence_ids": [
+        "EV-CI-001"
+      ]
+    },
+    "safety_compliance": {
+      "status": "NOT_APPLICABLE",
+      "evidence_ids": []
+    }
+  }
+}

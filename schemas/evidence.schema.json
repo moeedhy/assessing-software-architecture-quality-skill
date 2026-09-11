@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "evidence.schema.json",
+  "title": "Architecture assessment evidence item",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "source",
+    "locator",
+    "scope",
+    "time_window",
+    "evidence_kind",
+    "claim_status",
+    "confidence",
+    "factor_ids"
+  ],
+  "properties": {
+    "id": { "type": "string", "pattern": "^EV-[A-Z0-9-]+$" },
+    "source": { "type": "string", "minLength": 1 },
+    "locator": { "type": "string", "minLength": 1 },
+    "scope": { "type": "string", "minLength": 1 },
+    "time_window": { "type": ["string", "null"] },
+    "evidence_kind": {
+      "enum": ["MEASUREMENT", "OBSERVATION", "DOCUMENTED_CLAIM"]
+    },
+    "claim_status": { "enum": ["OBSERVED", "INFERRED", "ASSUMED"] },
+    "confidence": { "enum": ["LOW", "MEDIUM", "HIGH"] },
+    "factor_ids": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^AQ-[A-H][0-9]{2}$" },
+      "uniqueItems": true
+    }
+  }
+}

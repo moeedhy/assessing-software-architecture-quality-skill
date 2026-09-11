@@ -1,0 +1,16 @@
+{
+  "schema_version": "2.0",
+  "mode": "REVIEW",
+  "depth": "STANDARD",
+  "score_requested": false,
+  "context_profiles": [],
+  "custom_domain_weights": null,
+  "evidence": [],
+  "factors": [],
+  "gates": {
+    "security": { "status": "UNKNOWN", "evidence_ids": [] },
+    "data_integrity": { "status": "UNKNOWN", "evidence_ids": [] },
+    "recovery": { "status": "UNKNOWN", "evidence_ids": [] },
+    "safety_compliance": { "status": "UNKNOWN", "evidence_ids": [] }
+  }
+}

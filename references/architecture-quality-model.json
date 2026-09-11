@@ -1,0 +1,564 @@
+{
+  "schema_version": "2.0",
+  "model_version": "2.1.0",
+  "health_scale": {
+    "0": "Critical",
+    "1": "Weak",
+    "2": "Acceptable",
+    "3": "Strong",
+    "4": "Excellent"
+  },
+  "score_bands": [
+    {
+      "minimum": 88,
+      "label": "Exemplary"
+    },
+    {
+      "minimum": 63,
+      "label": "Healthy"
+    },
+    {
+      "minimum": 38,
+      "label": "Adequate"
+    },
+    {
+      "minimum": 13,
+      "label": "Fragile"
+    },
+    {
+      "minimum": 0,
+      "label": "Failing"
+    }
+  ],
+  "coverage_threshold": 70,
+  "domain_unknown_threshold": 50,
+  "multiplier_cap": 2.0,
+  "critical_gates": [
+    "security",
+    "data_integrity",
+    "recovery",
+    "safety_compliance"
+  ],
+  "context_profiles": {
+    "security-critical-regulated": {
+      "A": 1.0,
+      "B": 1.0,
+      "C": 1.0,
+      "D": 1.15,
+      "E": 1.25,
+      "F": 1.15,
+      "G": 1.0,
+      "H": 1.6
+    },
+    "high-scale-distributed": {
+      "A": 1.0,
+      "B": 1.1,
+      "C": 1.1,
+      "D": 1.5,
+      "E": 1.5,
+      "F": 1.2,
+      "G": 1.0,
+      "H": 1.1
+    },
+    "fast-changing-product": {
+      "A": 1.2,
+      "B": 1.1,
+      "C": 1.35,
+      "D": 1.0,
+      "E": 1.0,
+      "F": 1.2,
+      "G": 1.1,
+      "H": 1.0
+    },
+    "legacy-modernization": {
+      "A": 1.2,
+      "B": 1.25,
+      "C": 1.5,
+      "D": 1.1,
+      "E": 1.0,
+      "F": 1.2,
+      "G": 1.1,
+      "H": 1.0
+    },
+    "public-platform-api": {
+      "A": 1.0,
+      "B": 1.25,
+      "C": 1.2,
+      "D": 1.1,
+      "E": 1.1,
+      "F": 1.1,
+      "G": 1.2,
+      "H": 1.2
+    },
+    "data-intensive": {
+      "A": 1.0,
+      "B": 1.1,
+      "C": 1.1,
+      "D": 1.4,
+      "E": 1.3,
+      "F": 1.1,
+      "G": 1.1,
+      "H": 1.2
+    },
+    "ai-system": {
+      "A": 1.1,
+      "B": 1.1,
+      "C": 1.2,
+      "D": 1.25,
+      "E": 1.25,
+      "F": 1.4,
+      "G": 1.0,
+      "H": 1.5
+    }
+  },
+  "domains": [
+    {
+      "id": "A",
+      "name": "Understandability",
+      "weight": 10.0,
+      "factors": [
+        {
+          "id": "AQ-A01",
+          "name": "Cognitive Load",
+          "weight": 4.0,
+          "metric_class": "M4",
+          "overlap_group": "understandability",
+          "role": "primary"
+        },
+        {
+          "id": "AQ-A02",
+          "name": "Cognitive Complexity",
+          "weight": 2.5,
+          "metric_class": "M1",
+          "overlap_group": "code-complexity",
+          "role": "diagnostic"
+        },
+        {
+          "id": "AQ-A03",
+          "name": "Obscurity / Unknown Unknowns",
+          "weight": 2.0,
+          "metric_class": "M5",
+          "overlap_group": "discoverability",
+          "role": "primary"
+        },
+        {
+          "id": "AQ-A04",
+          "name": "Conceptual Clarity",
+          "weight": 1.5,
+          "metric_class": "M5",
+          "overlap_group": "conceptual-model",
+          "role": "primary"
+        }
+      ]
+    },
+    {
+      "id": "B",
+      "name": "Modularity & Dependencies",
+      "weight": 13.0,
+      "factors": [
+        {
+          "id": "AQ-B01",
+          "name": "Cohesion",
+          "weight": 2.0,
+          "metric_class": "M5",
+          "overlap_group": "responsibility-boundary",
+          "role": "primary"
+        },
+        {
+          "id": "AQ-B02",
+          "name": "LCOM",
+          "weight": 0.5,
+          "metric_class": "M1",
+          "overlap_group": "cohesion-diagnostics",
+          "role": "diagnostic"
+        },
+        {
+          "id": "AQ-B03",
+          "name": "Coupling",
+          "weight": 2.0,
+          "metric_class": "M4",
+          "overlap_group": "coupling",
+          "role": "primary"
+        },
+        {
+          "id": "AQ-B04",
+          "name": "Afferent Coupling (Ca)",
+          "weight": 0.5,
+          "metric_class": "M1",
+          "overlap_group": "coupling-diagnostics",
+          "role": "diagnostic"
+        },
+        {
+          "id": "AQ-B05",
+          "name": "Efferent Coupling (Ce)",
+          "weight": 0.5,
+          "metric_class": "M1",
+          "overlap_group": "coupling-diagnostics",
+          "role": "diagnostic"
+        },
+        {
+          "id": "AQ-B06",
+          "name": "Instability",
+          "weight": 0.5,
+          "metric_class": "M1",
+          "overlap_group": "coupling-diagnostics",
+          "role": "diagnostic"
+        },
+        {
+          "id": "AQ-B07",
+          "name": "Dependency Cycles",
+          "weight": 1.5,
+          "metric_class": "M1",
+          "overlap_group": "dependency-structure",
+          "role": "primary"
+        },
+        {
+          "id": "AQ-B08",
+          "name": "Dependency Direction",
+          "weight": 1.5,
+          "metric_class": "M5",
+          "overlap_group": "dependency-structure",
+          "role": "primary"
+        },
+        {
+          "id": "AQ-B09",
+          "name": "Separation of Concerns",
+          "weight": 1.0,
+          "metric_class": "M5",
+          "overlap_group": "responsibility-boundary",
+          "role": "supporting"
+        },
+        {
+          "id": "AQ-B10",
+          "name": "Information Hiding",
+          "weight": 1.5,
+          "metric_class": "M5",
+          "overlap_group": "boundary-quality",
+          "role": "primary"
+        },
+        {
+          "id": "AQ-B11",
+          "name": "Encapsulation",
+          "weight": 0.5,
+          "metric_class": "M5",
+          "overlap_group": "boundary-quality",
+          "role": "supporting"
+        },
+        {
+          "id": "AQ-B12",
+          "name": "API Surface Area",
+          "weight": 1.0,
+          "metric_class": "M4",
+          "overlap_group": "contract-cost",
+          "role": "supporting"
+        }
+      ]
+    },
+    {
+      "id": "C",
+      "name": "Changeability & Evolvability",
+      "weight": 18.0,
+      "factors": [
+        {
+          "id": "AQ-C01",
+          "name": "Change Amplification",
+          "weight": 4.0,
+          "metric_class": "M3",
+          "overlap_group": "change-locality",
+          "role": "primary"
+        },
+        {
+          "id": "AQ-C02",
+          "name": "Change Coupling",
+          "weight": 1.5,
+          "metric_class": "M3",
+          "overlap_group": "change-locality",
+          "role": "supporting"
+        },
+        {
+          "id": "AQ-C03",
+          "name": "Volatility Alignment",
+          "weight": 2.0,
+          "metric_class": "M4",
+          "overlap_group": "change-locality",
+          "role": "primary"
+        },
+        {
+          "id": "AQ-C04",
+          "name": "Replaceability",
+          "weight": 1.0,
+          "metric_class": "M4",
+          "overlap_group": "optionality",
+          "role": "supporting"
+        },
+        {
+          "id": "AQ-C05",
+          "name": "Evolvability",
+          "weight": 2.5,
+          "metric_class": "M4",
+          "overlap_group": "optionality",
+          "role": "primary"
+        },
+        {
+          "id": "AQ-C06",
+          "name": "Reversibility",
+          "weight": 1.0,
+          "metric_class": "M4",
+          "overlap_group": "optionality",
+          "role": "supporting"
+        },
+        {
+          "id": "AQ-C07",
+          "name": "Hotspot Risk",
+          "weight": 2.5,
+          "metric_class": "M3",
+          "overlap_group": "change-risk",
+          "role": "primary"
+        },
+        {
+          "id": "AQ-C08",
+          "name": "Technical Debt Pressure",
+          "weight": 1.5,
+          "metric_class": "M4",
+          "overlap_group": "change-risk",
+          "role": "supporting"
+        },
+        {
+          "id": "AQ-C09",
+          "name": "Contract & Schema Evolution",
+          "weight": 2.0,
+          "metric_class": "M4",
+          "overlap_group": "contract-cost",
+          "role": "primary"
+        }
+      ]
+    },
+    {
+      "id": "D",
+      "name": "Distributed Coupling & Failure Containment",
+      "weight": 12.0,
+      "factors": [
+        {
+          "id": "AQ-D01",
+          "name": "Temporal Coupling",
+          "weight": 2.0,
+          "metric_class": "M4",
+          "overlap_group": "distributed-coupling",
+          "role": "supporting"
+        },
+        {
+          "id": "AQ-D02",
+          "name": "Data Coupling",
+          "weight": 2.5,
+          "metric_class": "M4",
+          "overlap_group": "distributed-coupling",
+          "role": "primary"
+        },
+        {
+          "id": "AQ-D03",
+          "name": "Consistency Coupling",
+          "weight": 2.0,
+          "metric_class": "M4",
+          "overlap_group": "distributed-coupling",
+          "role": "primary"
+        },
+        {
+          "id": "AQ-D04",
+          "name": "Coordination Cost",
+          "weight": 2.0,
+          "metric_class": "M4",
+          "overlap_group": "coordination",
+          "role": "supporting"
+        },
+        {
+          "id": "AQ-D05",
+          "name": "Blast Radius",
+          "weight": 3.5,
+          "metric_class": "M4",
+          "overlap_group": "failure-containment",
+          "role": "primary"
+        }
+      ]
+    },
+    {
+      "id": "E",
+      "name": "Runtime Quality",
+      "weight": 14.0,
+      "factors": [
+        {
+          "id": "AQ-E01",
+          "name": "Scalability",
+          "weight": 2.5,
+          "metric_class": "M2",
+          "overlap_group": "runtime-capacity",
+          "role": "primary"
+        },
+        {
+          "id": "AQ-E02",
+          "name": "Performance Efficiency",
+          "weight": 2.5,
+          "metric_class": "M2",
+          "overlap_group": "runtime-capacity",
+          "role": "supporting"
+        },
+        {
+          "id": "AQ-E03",
+          "name": "Availability",
+          "weight": 2.5,
+          "metric_class": "M2",
+          "overlap_group": "runtime-reliability",
+          "role": "primary"
+        },
+        {
+          "id": "AQ-E04",
+          "name": "Resilience",
+          "weight": 3.5,
+          "metric_class": "M4",
+          "overlap_group": "runtime-reliability",
+          "role": "primary"
+        },
+        {
+          "id": "AQ-E05",
+          "name": "Recovery Architecture",
+          "weight": 3.0,
+          "metric_class": "M2",
+          "overlap_group": "runtime-reliability",
+          "role": "primary"
+        }
+      ]
+    },
+    {
+      "id": "F",
+      "name": "Engineering Capability",
+      "weight": 12.0,
+      "factors": [
+        {
+          "id": "AQ-F01",
+          "name": "Testability",
+          "weight": 3.0,
+          "metric_class": "M4",
+          "overlap_group": "verification",
+          "role": "primary"
+        },
+        {
+          "id": "AQ-F02",
+          "name": "Observability",
+          "weight": 2.5,
+          "metric_class": "M2",
+          "overlap_group": "operability",
+          "role": "primary"
+        },
+        {
+          "id": "AQ-F03",
+          "name": "Deployability",
+          "weight": 2.5,
+          "metric_class": "M2",
+          "overlap_group": "delivery",
+          "role": "primary"
+        },
+        {
+          "id": "AQ-F04",
+          "name": "Architecture Conformance",
+          "weight": 2.0,
+          "metric_class": "M4",
+          "overlap_group": "governance",
+          "role": "supporting"
+        },
+        {
+          "id": "AQ-F05",
+          "name": "Architecture Fitness Functions",
+          "weight": 2.0,
+          "metric_class": "M4",
+          "overlap_group": "verification",
+          "role": "supporting"
+        }
+      ]
+    },
+    {
+      "id": "G",
+      "name": "Domain & Organization",
+      "weight": 8.0,
+      "factors": [
+        {
+          "id": "AQ-G01",
+          "name": "Domain Alignment",
+          "weight": 4.0,
+          "metric_class": "M5",
+          "overlap_group": "sociotechnical-boundary",
+          "role": "primary"
+        },
+        {
+          "id": "AQ-G02",
+          "name": "Ownership Clarity",
+          "weight": 2.0,
+          "metric_class": "M5",
+          "overlap_group": "sociotechnical-boundary",
+          "role": "primary"
+        },
+        {
+          "id": "AQ-G03",
+          "name": "Team Cognitive Load",
+          "weight": 2.0,
+          "metric_class": "M4",
+          "overlap_group": "sociotechnical-boundary",
+          "role": "supporting"
+        }
+      ]
+    },
+    {
+      "id": "H",
+      "name": "Governance & Security",
+      "weight": 13.0,
+      "factors": [
+        {
+          "id": "AQ-H01",
+          "name": "Architecture Risk",
+          "weight": 2.0,
+          "metric_class": "M4",
+          "overlap_group": "risk",
+          "role": "primary"
+        },
+        {
+          "id": "AQ-H02",
+          "name": "Attack Surface",
+          "weight": 3.0,
+          "metric_class": "M4",
+          "overlap_group": "security",
+          "role": "primary"
+        },
+        {
+          "id": "AQ-H03",
+          "name": "Security Coupling",
+          "weight": 2.0,
+          "metric_class": "M4",
+          "overlap_group": "security",
+          "role": "primary"
+        },
+        {
+          "id": "AQ-H04",
+          "name": "Continuous Architecture Governance",
+          "weight": 2.0,
+          "metric_class": "M4",
+          "overlap_group": "governance",
+          "role": "primary"
+        },
+        {
+          "id": "AQ-H05",
+          "name": "Supply Chain & Build Integrity",
+          "weight": 2.5,
+          "metric_class": "M4",
+          "overlap_group": "security",
+          "role": "primary"
+        },
+        {
+          "id": "AQ-H06",
+          "name": "Data Lifecycle & Privacy Architecture",
+          "weight": 1.5,
+          "metric_class": "M4",
+          "overlap_group": "governance",
+          "role": "primary"
+        }
+      ]
+    }
+  ]
+}
