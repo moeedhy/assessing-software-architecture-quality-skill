@@ -19,6 +19,7 @@ Identify components, dependency direction, public contracts, data owners, messag
 Use `evidence-contract.md` and, for structured work, `schemas/assessment.schema.json`. Collect only channels that can affect the decision:
 
 - static structure: imports, graph, public surface, cycles, framework/vendor leakage;
+- framework use, when consequential: installed version, actual hosts/adapters, native capabilities used, duplicated mechanisms, extension points, and justified customization; follow [the framework-use lens](framework-leverage.md);
 - history: churn, feature-level change amplification, co-change, hotspots, ownership concentration;
 - tests: boundaries, duration, determinism, dependencies, critical-path evidence;
 - delivery: units, lead time, failures, recovery, coordinated releases, manual gates;
@@ -56,6 +57,8 @@ For each material factor capture evidence IDs, health when assessed, confidence,
 
 Group overlapping factor signals under a causal finding.
 
+For competing quality goals, use [ATAM-inspired scenarios](assessment-methods.md). For broader coverage, necessary architecture views, or cloud operations, select the corresponding method from that reference. Record only methods actually used; their outputs support existing factors rather than creating additional weighted dimensions.
+
 ## 6. Compare options
 
 When a decision is genuinely open, compare at least two viable options across change locality, cognitive load, operational complexity, security, consistency, deployability, migration cost, reversibility, performance, and ownership. Include “keep and constrain” when credible. Do not select patterns because they are fashionable.
@@ -73,6 +76,8 @@ Define before/after proof. Moving files, passing narrow unit tests, or producing
 ## 9. Preserve resumable state
 
 For long assessments, checkpoint the decision frame, evidence records, factor/gate states, contradictions, inspected scope, pending lanes, and provisional findings in the assessment schema. On resume or after context compaction, validate the checkpoint and re-open decisive evidence rather than trusting a prose summary alone.
+
+Use assessment schema `2.1` with `review_context` for this complete checkpoint. Schema `2.0` remains readable; an absent context means the decision frame and unfinished work were not captured. Recover them from original evidence and user scope before continuing. See [the checkpoint contract](evidence-contract.md) and [the worked checkpoint](../examples/framework-review.json).
 
 When the user steers mid-turn, reconcile the new request with the recorded scope and authorization. Cancel or narrow obsolete work when supported.
 

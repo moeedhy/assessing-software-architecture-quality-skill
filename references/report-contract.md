@@ -65,6 +65,10 @@ Verification:
 Owner: if known
 ```
 
+When framework use matters, include the framework/version, required semantics, current implementation, native capability evidence, fit/gap, classification, and migration cost within that finding. Use EFFECTIVE_USE / AVOIDABLE_DUPLICATION / MISUSE / JUSTIFIED_CUSTOMIZATION / UNKNOWN. Keep shared causes under one finding even when several methods or factors reveal them; there is no separate framework score.
+
+When a method is selected, attach its relevant scenario, coverage gap, view, or operational question to existing findings. Label methodology mappings as authored interpretations; they establish neither formal compliance nor a conversion between scoring systems.
+
 Use **P0** for a critical gate or immediate unacceptable systemic risk; **P1** for high-impact/high-pressure broad risk; **P2** for material but contained or moderate-pressure risk; **P3** for localized improvement; **P4** for optional/cosmetic work with weak economic value.
 
 ## Evidence language

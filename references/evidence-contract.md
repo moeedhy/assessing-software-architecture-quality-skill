@@ -31,6 +31,24 @@ These dimensions are not interchangeable. A documented claim can be directly obs
 
 Use precise locators: file and line, query/report ID, dashboard and time range, incident ID, trace ID, commit range, or interview/decision record. Record time windows for operational and historical measurements.
 
+New evidence records should include the optional `summary` string: the observation or claim at that locator, without secrets or invented measurements. Legacy evidence without summaries remains valid; reopen the source to recover its substance.
+
+## Resumable review context
+
+Assessment schema `2.1` adds optional `review_context`; legacy schema `2.0` inputs remain supported and cannot contain it. Absence means not captured, not complete. When present, include:
+
+- `decision_frame`: decision, scope, constraints, assumptions, and unknowns.
+- `inspected_scope`: paths/ranges or other inspected artifact locators.
+- `scenarios`: stable `SC-*` IDs, stimulus, environment, affected component, expected response, acceptance criteria, and priority. Unknown acceptance criteria are `null`.
+- `findings`: stable `F-*` IDs with priority, observation, interpretation, recommendation, verification, factor IDs, and evidence IDs. Each factor must be supported by at least one cited evidence record declaring it.
+- `alternatives`: stable `ALT-*` IDs, descriptions, tradeoffs, and scenario IDs.
+- `contradictions`: stable `CON-*` IDs, evidence IDs, description, status, resolution, and next check. OPEN requires a next check and `resolution: null`; RESOLVED requires a nonempty resolution.
+- `pending_work` and `provisional_decision` (`null` when undecided); optional `methods` records only methods used.
+
+Findings may contain `framework_assessment`: framework, version (`null` if unknown), requirement, capability, capability evidence IDs, semantic fit/gap, classification, and migration cost. Separate official capability evidence from evidence of actual project use. Unknown support must qualify recommendations; availability does not prove correct integration.
+
+Collections may be empty when nothing has been inspected or found. Do not create findings just to fill the schema. IDs must be unique within their collections and references must resolve. Validation checks shape and references, not truth or completeness of reasoning. See [the worked checkpoint](../examples/framework-review.json).
+
 ## Corroboration policy
 
 - High-consequence findings should use two independent channels when practical.

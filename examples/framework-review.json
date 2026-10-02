@@ -1,0 +1,144 @@
+{
+  "schema_version": "2.1",
+  "mode": "REVIEW",
+  "depth": "STANDARD",
+  "score_requested": false,
+  "context_profiles": [],
+  "custom_domain_weights": null,
+  "evidence": [
+    {
+      "id": "EV-001",
+      "source": "repository",
+      "locator": "src/bootstrap.ts:8",
+      "scope": "Synthetic example: API startup (not an observation of this repository)",
+      "time_window": null,
+      "evidence_kind": "OBSERVATION",
+      "claim_status": "OBSERVED",
+      "confidence": "HIGH",
+      "factor_ids": [
+        "AQ-A01"
+      ],
+      "summary": "Bootstrap installs a second dependency registry."
+    },
+    {
+      "id": "EV-ADR-001",
+      "source": "synthetic ADR fixture",
+      "locator": "docs/adr/001-composition.md:12",
+      "scope": "Synthetic example: API startup (not an observation of this repository)",
+      "time_window": null,
+      "evidence_kind": "DOCUMENTED_CLAIM",
+      "claim_status": "OBSERVED",
+      "confidence": "HIGH",
+      "factor_ids": [
+        "AQ-A01"
+      ],
+      "summary": "ADR declares a single provider registry."
+    }
+  ],
+  "factors": [],
+  "gates": {
+    "security": {
+      "status": "UNKNOWN",
+      "evidence_ids": []
+    },
+    "data_integrity": {
+      "status": "UNKNOWN",
+      "evidence_ids": []
+    },
+    "recovery": {
+      "status": "UNKNOWN",
+      "evidence_ids": []
+    },
+    "safety_compliance": {
+      "status": "UNKNOWN",
+      "evidence_ids": []
+    }
+  },
+  "review_context": {
+    "decision_frame": {
+      "decision": "Keep or replace the second registry?",
+      "scope": "Synthetic framework review example: API startup",
+      "constraints": [
+        "Preserve worker support"
+      ],
+      "assumptions": [],
+      "unknowns": [
+        "Installed NestJS version",
+        "Startup trace proving which registry resolves worker dependencies"
+      ]
+    },
+    "inspected_scope": [
+      "src/bootstrap.ts:1-30",
+      "docs/adr/001-composition.md:12"
+    ],
+    "scenarios": [
+      {
+        "id": "SC-001",
+        "stimulus": "Add a worker host",
+        "environment": "startup",
+        "affected_component": "composition root",
+        "expected_response": "Reuse capability wiring",
+        "acceptance_criteria": null,
+        "priority": "HIGH"
+      }
+    ],
+    "findings": [
+      {
+        "id": "F-001",
+        "title": "Second registry needs semantic comparison",
+        "priority": "P2",
+        "factor_ids": [
+          "AQ-A01"
+        ],
+        "evidence_ids": [
+          "EV-001"
+        ],
+        "observation": "Second registry exists",
+        "interpretation": "Duplication is a hypothesis",
+        "recommendation": "Compare lifecycle behavior",
+        "verification": "Exercise both hosts",
+        "framework_assessment": {
+          "framework": "NestJS",
+          "version": null,
+          "requirement": "Support API and worker wiring",
+          "capability": "Custom providers",
+          "capability_evidence_ids": [],
+          "fit_gap": "Version and lifecycle fit unknown",
+          "classification": "UNKNOWN",
+          "migration_cost": "Unknown until wiring is traced"
+        }
+      }
+    ],
+    "alternatives": [
+      {
+        "id": "ALT-001",
+        "description": "Keep and constrain the registry",
+        "tradeoffs": "Lower migration cost; two wiring systems remain",
+        "scenario_ids": [
+          "SC-001"
+        ]
+      }
+    ],
+    "contradictions": [
+      {
+        "id": "CON-001",
+        "evidence_ids": [
+          "EV-001",
+          "EV-ADR-001"
+        ],
+        "description": "ADR declares one registry, bootstrap installs a second registry",
+        "status": "OPEN",
+        "resolution": null,
+        "next_check": "Trace dependency resolution in both hosts"
+      }
+    ],
+    "pending_work": [
+      "Verify installed version",
+      "Trace dependency resolution in both hosts"
+    ],
+    "provisional_decision": null,
+    "methods": [
+      "ATAM_INSPIRED"
+    ]
+  }
+}

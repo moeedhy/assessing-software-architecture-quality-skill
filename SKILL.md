@@ -3,7 +3,7 @@ name: assessing-software-architecture-quality
 description: Use when assessing software architecture — architecture reviews, design and ADR decisions, splitting or merging services, monolith vs microservices, rewrite vs refactor, legacy modernization, distributed monolith or coupling symptoms, change amplification, tech debt prioritization, scaling and resilience risk, architecture incidents, or a requested architecture score. Do not use for routine style review, formatting, or isolated implementation questions without architectural tradeoffs.
 compatibility: Core guidance is tool-agnostic; optional validation and scoring scripts require Python 3.10+.
 metadata:
-  version: "2.1.0"
+  version: "2.2.0"
   model-version: "2.1.0"
   factors: "49"
   domains: "8"
@@ -43,6 +43,10 @@ Each step maps to a numbered section of the [review protocol](references/review-
 8. Checkpoint resumable state on long assessments, and stop when the decision is supported (§9–10).
 
 Use [runtime guidance](references/runtime-guidance.md) to adapt to available tools and current AI capabilities.
+
+When framework choices materially affect the decision, use the [framework-use lens](references/framework-leverage.md); load the [NestJS reference](references/nestjs.md) only for a relevant NestJS host. Compare required semantics and demonstrated maintenance cost with capabilities supported by the installed version. Useful native integration and justified custom boundaries are both valid outcomes. This lens adds no score.
+
+Use [assessment methods](references/assessment-methods.md) selectively: ATAM-inspired scenarios for competing goals, ISO 25010 for quality coverage, C4 for necessary views, and provider-specific Well-Architected questions for cloud operations. Their findings feed the same evidence ledger and existing factors.
 
 ## Scoring
 

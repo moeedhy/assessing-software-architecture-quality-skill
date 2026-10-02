@@ -1,0 +1,2 @@
+# Development checks only; scripts/architecture_quality.py has no runtime dependencies.
+jsonschema==4.26.0

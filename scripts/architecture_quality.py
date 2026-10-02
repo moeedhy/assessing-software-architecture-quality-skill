@@ -5,10 +5,12 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import re
 import sys
 from pathlib import Path
 from typing import Any
+from urllib.parse import unquote, urlsplit
 
 
 MODES = {"DESIGN", "REVIEW", "CHANGE", "MODERNIZATION", "INCIDENT"}
@@ -20,7 +22,7 @@ DOMAIN_IDS = tuple("ABCDEFGH")
 
 # Deliberate canary: bump only when the canonical model gains or loses a factor.
 EXPECTED_FACTORS = 49
-SKILL_VERSION = "2.1.0"
+SKILL_VERSION = "2.2.0"
 
 
 def load_json(path: Path) -> dict[str, Any]:
@@ -111,7 +113,8 @@ def validate_model(model: dict[str, Any]) -> dict[str, Any]:
 
 
 def validate_assessment(
-    assessment: dict[str, Any], model: dict[str, Any], *, for_scoring: bool = False
+    assessment: dict[str, Any], model: dict[str, Any], *, for_scoring: bool = False,
+    schema_path: Path | None = None,
 ) -> dict[str, Any]:
     if not isinstance(assessment, dict):
         raise ValueError("assessment must be a JSON object")
@@ -132,11 +135,13 @@ def validate_assessment(
     missing = sorted(required - set(assessment))
     if missing:
         raise ValueError(f"assessment is missing required fields: {', '.join(missing)}")
-    extra = sorted(set(assessment) - required)
+    extra = sorted(set(assessment) - required - {"review_context"})
     if extra:
         raise ValueError(f"assessment has unsupported fields: {', '.join(extra)}")
-    if assessment["schema_version"] != "2.0":
-        raise ValueError("assessment schema_version must be 2.0")
+    if assessment["schema_version"] not in ("2.0", "2.1"):
+        raise ValueError("assessment schema_version must be 2.0 or 2.1")
+    if "review_context" in assessment and assessment["schema_version"] != "2.1":
+        raise ValueError("review_context requires assessment schema_version 2.1")
     if assessment["mode"] not in MODES:
         raise ValueError(f"invalid assessment mode: {assessment['mode']}")
     if assessment["depth"] not in DEPTHS:
@@ -163,8 +168,9 @@ def validate_assessment(
             raise ValueError("custom_domain_weights must be an object or null")
         if set(custom) != set(DOMAIN_IDS):
             raise ValueError("custom_domain_weights must define domains A through H")
-        if any(isinstance(custom[key], bool) for key in DOMAIN_IDS):
-            raise ValueError("custom_domain_weights values must be numbers")
+        if any(isinstance(custom[key], bool) or not isinstance(custom[key], (int, float))
+               or not math.isfinite(custom[key]) for key in DOMAIN_IDS):
+            raise ValueError("custom_domain_weights values must be finite numbers")
         try:
             values = [float(custom[key]) for key in DOMAIN_IDS]
         except (TypeError, ValueError) as exc:
@@ -198,7 +204,7 @@ def validate_assessment(
             raise ValueError(
                 f"evidence item {index} missing fields: {', '.join(missing_fields)}"
             )
-        extra_fields = sorted(set(item) - evidence_fields)
+        extra_fields = sorted(set(item) - evidence_fields - {"summary"})
         if extra_fields:
             raise ValueError(
                 f"evidence item {index} has unsupported fields: {', '.join(extra_fields)}"
@@ -238,6 +244,10 @@ def validate_assessment(
         for field in ("source", "locator", "scope"):
             if not isinstance(item.get(field), str) or not item[field].strip():
                 raise ValueError(f"evidence {evidence_id} requires non-empty {field}")
+        if "summary" in item and (
+            not isinstance(item["summary"], str) or not item["summary"].strip()
+        ):
+            raise ValueError(f"evidence {evidence_id} summary must be a non-empty string")
         evidence_by_id[evidence_id] = item
 
     factor_items = assessment["factors"]
@@ -297,7 +307,7 @@ def validate_assessment(
             raise ValueError(f"unassessed factor {factor_id} must have health=null")
         assessment_factors[factor_id] = factor
 
-    if for_scoring and set(assessment_factors) != set(model_factors):
+    if (for_scoring or assessment["score_requested"]) and set(assessment_factors) != set(model_factors):
         raise ValueError(
             f"DEEP scoring requires all {EXPECTED_FACTORS} factors exactly once"
         )
@@ -338,11 +348,109 @@ def validate_assessment(
         if status in {"PASS", "FAIL"} and not refs:
             raise ValueError(f"assessed gate {gate_name} requires evidence")
 
+    if "review_context" in assessment:
+        validate_review_context(assessment["review_context"], evidence_by_id, model_factors, schema_path)
+
     return {
         "evidence": len(evidence_ids),
         "factors": len(assessment_factors),
         "gates": len(gates),
     }
+
+
+def _checkpoint_shape(value: Any, spec: dict[str, Any], defs: dict, path: str) -> None:
+    """Validate only the closed vocabulary used by review-context definitions.
+
+    This is not a general JSON Schema engine. Unsupported schema keywords fail
+    closed; development checks also use the official draft-2020-12 validator.
+    """
+    supported = {"$ref", "type", "properties", "required", "additionalProperties",
+                 "items", "minItems", "uniqueItems", "minLength", "pattern",
+                 "enum", "const", "oneOf"}
+    if set(spec) - supported:
+        raise ValueError(f"unsupported checkpoint schema keyword at {path}")
+    # Only the closed `false` form is enforced below; a subschema would fail open.
+    if spec.get("additionalProperties", False) is not False:
+        raise ValueError(f"unsupported checkpoint schema keyword at {path}")
+    if "$ref" in spec:
+        name = spec["$ref"].removeprefix("#/$defs/")
+        if spec["$ref"] != f"#/$defs/{name}" or name not in defs:
+            raise ValueError(f"unsupported checkpoint schema reference at {path}")
+        _checkpoint_shape(value, defs[name], defs, path)
+    if "type" in spec:
+        types = spec["type"] if isinstance(spec["type"], list) else [spec["type"]]
+        checks = {"object": isinstance(value, dict), "array": isinstance(value, list),
+                  "string": isinstance(value, str), "null": value is None}
+        if any(t not in checks for t in types):
+            raise ValueError(f"unsupported checkpoint schema type at {path}")
+        if not any(checks[t] for t in types):
+            raise ValueError(f"{path} must have type {spec['type']}")
+    if "enum" in spec and value not in spec["enum"]:
+        raise ValueError(f"{path} has an invalid value")
+    if "const" in spec and value != spec["const"]:
+        raise ValueError(f"{path} must equal {spec['const']}")
+    if isinstance(value, str):
+        if len(value) < spec.get("minLength", 0):
+            raise ValueError(f"{path} must not be empty")
+        if "pattern" in spec and re.search(spec["pattern"], value) is None:
+            raise ValueError(f"{path} has an invalid format")
+    if isinstance(value, dict):
+        fields = spec.get("properties", {})
+        if set(spec.get("required", [])) - set(value):
+            raise ValueError(f"{path} is missing required fields")
+        if spec.get("additionalProperties") is False and set(value) - set(fields):
+            raise ValueError(f"{path} has unsupported fields")
+        for key in value.keys() & fields.keys():
+            _checkpoint_shape(value[key], fields[key], defs, f"{path}.{key}")
+    if isinstance(value, list):
+        if len(value) < spec.get("minItems", 0):
+            raise ValueError(f"{path} has too few items")
+        if spec.get("uniqueItems") and any(v in value[:i] for i, v in enumerate(value)):
+            raise ValueError(f"{path} must have unique items")
+        if "items" in spec:
+            for index, item in enumerate(value):
+                _checkpoint_shape(item, spec["items"], defs, f"{path}[{index}]")
+    if "oneOf" in spec:
+        matches = 0
+        for branch in spec["oneOf"]:
+            try:
+                _checkpoint_shape(value, branch, defs, path)
+                matches += 1
+            except ValueError:
+                pass
+        if matches != 1:
+            raise ValueError(f"{path} must satisfy exactly one state contract")
+
+
+def validate_review_context(context: dict, evidence: dict, factors: dict,
+                           schema_path: Path | None = None) -> None:
+    schema = load_json(schema_path or default_root() / "schemas" / "assessment.schema.json")
+    defs = schema["$defs"]
+    _checkpoint_shape(context, defs["review_context"], defs, "review_context")
+
+    def references(refs: list[str], known: dict | set, path: str) -> None:
+        missing = sorted(set(refs) - set(known))
+        if missing:
+            raise ValueError(f"{path} references unknown IDs: {', '.join(missing)}")
+
+    ids = {}
+    for collection in ("scenarios", "findings", "alternatives", "contradictions"):
+        values = [item["id"] for item in context[collection]]
+        if len(values) != len(set(values)):
+            raise ValueError(f"review_context.{collection} has duplicate IDs")
+        ids[collection] = set(values)
+    for finding in context["findings"]:
+        references(finding["factor_ids"], factors, finding["id"])
+        references(finding["evidence_ids"], evidence, finding["id"])
+        for factor in finding["factor_ids"]:
+            if not any(factor in evidence[e]["factor_ids"] for e in finding["evidence_ids"]):
+                raise ValueError(f"finding {finding['id']} evidence does not declare factor {factor}")
+        if "framework_assessment" in finding:
+            references(finding["framework_assessment"]["capability_evidence_ids"], evidence, finding["id"])
+    for alternative in context["alternatives"]:
+        references(alternative["scenario_ids"], ids["scenarios"], alternative["id"])
+    for contradiction in context["contradictions"]:
+        references(contradiction["evidence_ids"], evidence, contradiction["id"])
 
 
 def adjusted_weights(
@@ -572,7 +680,15 @@ def validate_eval_cases(path: Path) -> int:
         raise ValueError(f"missing evaluation corpus: {path}")
     ids: set[str] = set()
     count = 0
-    required = {"id", "category", "prompt", "critical", "pass", "fail"}
+    required = {
+        "id",
+        "category",
+        "prompt",
+        "critical",
+        "activation_expected",
+        "pass",
+        "fail",
+    }
     for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
         if not line.strip():
             continue
@@ -592,8 +708,9 @@ def validate_eval_cases(path: Path) -> int:
         for field in ("category", "prompt", "pass", "fail"):
             if not isinstance(case.get(field), str) or not case[field].strip():
                 raise ValueError(f"eval {case['id']} requires non-empty {field}")
-        if not isinstance(case.get("critical"), bool):
-            raise ValueError(f"eval {case['id']} critical must be a boolean")
+        for field in ("critical", "activation_expected"):
+            if not isinstance(case.get(field), bool):
+                raise ValueError(f"eval {case['id']} {field} must be a boolean")
         ids.add(case["id"])
         count += 1
     if count < 24:
@@ -623,6 +740,44 @@ def check_model_docs(root: Path, model: dict[str, Any]) -> None:
             raise ValueError(f"context profile {profile_id} is not synchronized in weights.md")
 
 
+# Fenced blocks and inline spans hold illustrative samples, not live links.
+FENCED_CODE = re.compile(r"^[ \t]*(`{3,}|~{3,}).*?(?:^[ \t]*\1[ \t]*$|\Z)", re.DOTALL | re.MULTILINE)
+INLINE_CODE = re.compile(r"(?<!`)(`+)(?!`).+?(?<!`)\1(?!`)", re.DOTALL)
+MARKDOWN_LINK = re.compile(r"(?<!\\)\[[^\]]+\]\(([^)]+)\)")
+
+
+def link_destination(target: str) -> str:
+    """Strip a CommonMark link title; a bare destination cannot contain spaces."""
+    target = target.strip()
+    if target.startswith("<"):
+        closing = target.find(">")
+        if closing != -1:
+            return target[1:closing]
+    return target.split(maxsplit=1)[0] if target else ""
+
+
+def validate_markdown_links(root: Path) -> None:
+    """Check local file targets in shipped Markdown prose, relative to each document."""
+    files = list(root.glob("*.md"))
+    for folder in ("references", "examples", "tests"):
+        files.extend((root / folder).rglob("*.md"))
+    # Keep the caller's root for reporting; containment compares resolved paths.
+    resolved_root = root.resolve()
+    for document in files:
+        content = document.read_text(encoding="utf-8")
+        prose = INLINE_CODE.sub("\n", FENCED_CODE.sub("\n", content))
+        for target in MARKDOWN_LINK.findall(prose):
+            destination = link_destination(target)
+            parsed = urlsplit(destination)
+            if parsed.scheme or parsed.netloc or not parsed.path:
+                continue
+            resolved = (document.parent / unquote(parsed.path)).resolve()
+            if not resolved.is_relative_to(resolved_root) or not resolved.exists():
+                raise ValueError(
+                    f"{document.relative_to(root)} references missing or external file: {destination}"
+                )
+
+
 def validate_package(root: Path) -> dict[str, Any]:
     skill_path = root / "SKILL.md"
     frontmatter = read_frontmatter(skill_path)
@@ -648,11 +803,7 @@ def validate_package(root: Path) -> dict[str, Any]:
     skill_text = skill_path.read_text(encoding="utf-8")
     if len(skill_text.splitlines()) > 500:
         raise ValueError("SKILL.md must remain under 500 lines for progressive disclosure")
-    for target in re.findall(r"\[[^\]]+\]\(([^)]+)\)", skill_text):
-        if "://" in target or target.startswith("#"):
-            continue
-        if not (root / target).exists():
-            raise ValueError(f"SKILL.md references missing file: {target}")
+    validate_markdown_links(root)
 
     model_path = root / "references" / "architecture-quality-model.json"
     model = load_json(model_path)
@@ -666,7 +817,11 @@ def validate_package(root: Path) -> dict[str, Any]:
     check_model_docs(root, model)
 
     template = load_json(root / "examples" / "assessment-template.json")
-    validate_assessment(template, model)
+    assessment_schema = root / "schemas" / "assessment.schema.json"
+    validate_assessment(template, model, schema_path=assessment_schema)
+    for example in sorted((root / "examples").glob("*.json")):
+        assessment = load_json(example)
+        validate_assessment(assessment, model, schema_path=assessment_schema)
 
     schemas = sorted((root / "schemas").glob("*.schema.json"))
     if len(schemas) != 3:

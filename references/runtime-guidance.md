@@ -29,6 +29,8 @@ When the runtime supports schema-constrained output or programmatic tools, use t
 
 Checkpoint long work after stable milestones: scope, inspected paths, evidence IDs, contradictions, gate/factor states, pending lanes, and provisional decisions. After resume or compaction, validate state and re-open decisive evidence.
 
+Use schema `2.1` and `review_context` to preserve these fields. A legacy `2.0` checkpoint or a `2.1` checkpoint without context preserves only the original evidence/factor/gate ledger; recover missing scope and pending work before resuming. Framework capability lookup requires actual installed-version evidence and official documentation for that version. If lookup is unavailable, qualify the recommendation and record the unresolved check.
+
 ## Parallel and asynchronous work
 
 If multiple workers are available and permitted, parallelize only independent evidence lanes, such as source structure, history, and runtime/CI. Give each lane a scoped question and required evidence format. One coordinator owns definitions, authorization, contradiction resolution, de-duplication, and final priority. Do not multiply agents when tasks share mutable state or when coordination cost exceeds likely evidence gain.

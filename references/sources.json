@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "reviewed_at": "2026-09-04",
+  "reviewed_at": "2026-09-12",
   "sources": [
     {
       "id": "agent-skills-spec",
@@ -56,7 +56,8 @@
       "url": "https://www.iso.org/standard/78176.html",
       "authority": "ISO",
       "stability": "stable",
-      "last_verified": "2026-09-04"
+      "last_verified": "2026-09-12",
+      "applicable_version": "ISO/IEC 25010:2023, edition 2"
     },
     {
       "id": "sonar-cognitive-complexity",
@@ -88,7 +89,8 @@
       "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/use-fault-isolation-to-protect-your-workload.html",
       "authority": "AWS Well-Architected Framework",
       "stability": "stable",
-      "last_verified": "2026-09-04"
+      "last_verified": "2026-09-12",
+      "applicable_version": "AWS Reliability Pillar REL10, living guidance as retrieved 2026-09-12"
     },
     {
       "id": "azure-microservices",
@@ -121,6 +123,123 @@
       "authority": "OpenSSF SLSA specification",
       "stability": "volatile",
       "last_verified": "2026-09-07"
+    },
+    {
+      "id": "sei-atam",
+      "title": "ATAM: Method for Architecture Evaluation",
+      "url": "https://www.sei.cmu.edu/library/atam-method-for-architecture-evaluation/",
+      "authority": "CMU Software Engineering Institute",
+      "stability": "stable",
+      "last_verified": "2026-09-12",
+      "applicable_version": "CMU/SEI-2000-TR-004 (2000); lightweight adaptation only"
+    },
+    {
+      "id": "c4-diagrams",
+      "title": "C4 model: Diagrams",
+      "url": "https://c4model.com/diagrams",
+      "authority": "C4 model official documentation",
+      "stability": "volatile",
+      "last_verified": "2026-09-12",
+      "applicable_version": "Living C4 guidance as retrieved 2026-09-12; no numbered release"
+    },
+    {
+      "id": "c4-container",
+      "title": "C4 model: Container abstraction",
+      "url": "https://c4model.com/abstractions/container",
+      "authority": "C4 model official documentation",
+      "stability": "volatile",
+      "last_verified": "2026-09-12",
+      "applicable_version": "Living C4 guidance as retrieved 2026-09-12; no numbered release"
+    },
+    {
+      "id": "aws-well-architected",
+      "title": "AWS Well-Architected Framework",
+      "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html",
+      "authority": "AWS official documentation",
+      "stability": "volatile",
+      "last_verified": "2026-09-12",
+      "applicable_version": "AWS workload guidance; page publication date 2024-11-06; retrieved 2026-09-12"
+    },
+    {
+      "id": "nestjs-migration",
+      "title": "NestJS migration guide",
+      "url": "https://docs.nestjs.com/migration-guide",
+      "authority": "NestJS official documentation",
+      "stability": "volatile",
+      "last_verified": "2026-09-12",
+      "applicable_version": "NestJS v11 to v12 migration; verify target repository versions"
+    },
+    {
+      "id": "nestjs-providers",
+      "title": "NestJS custom providers",
+      "url": "https://docs.nestjs.com/fundamentals/custom-providers",
+      "authority": "NestJS official documentation",
+      "stability": "volatile",
+      "last_verified": "2026-09-12",
+      "applicable_version": "Current v12 documentation as retrieved 2026-09-12; verify installed version"
+    },
+    {
+      "id": "nestjs-modules",
+      "title": "NestJS modules",
+      "url": "https://docs.nestjs.com/modules",
+      "authority": "NestJS official documentation",
+      "stability": "volatile",
+      "last_verified": "2026-09-12",
+      "applicable_version": "Current v12 documentation as retrieved 2026-09-12; verify installed version"
+    },
+    {
+      "id": "nestjs-lifecycle",
+      "title": "NestJS lifecycle events",
+      "url": "https://docs.nestjs.com/fundamentals/lifecycle-events",
+      "authority": "NestJS official documentation",
+      "stability": "volatile",
+      "last_verified": "2026-09-12",
+      "applicable_version": "Current v12 documentation; check version-specific lifecycle ordering before applying"
+    },
+    {
+      "id": "nestjs-scopes",
+      "title": "NestJS injection scopes",
+      "url": "https://docs.nestjs.com/fundamentals/injection-scopes",
+      "authority": "NestJS official documentation",
+      "stability": "volatile",
+      "last_verified": "2026-09-12",
+      "applicable_version": "Current v12 documentation as retrieved 2026-09-12; verify installed version"
+    },
+    {
+      "id": "nestjs-request-lifecycle",
+      "title": "NestJS request lifecycle",
+      "url": "https://docs.nestjs.com/faq/request-lifecycle",
+      "authority": "NestJS official documentation",
+      "stability": "volatile",
+      "last_verified": "2026-09-12",
+      "applicable_version": "Current v12 HTTP request lifecycle; verify adapter and other transports separately"
+    },
+    {
+      "id": "nestjs-cycles",
+      "title": "NestJS circular dependency",
+      "url": "https://docs.nestjs.com/fundamentals/circular-dependency",
+      "authority": "NestJS official documentation",
+      "stability": "volatile",
+      "last_verified": "2026-09-12",
+      "applicable_version": "Current v12 documentation as retrieved 2026-09-12; verify installed version"
+    },
+    {
+      "id": "nestjs-testing",
+      "title": "NestJS testing (official documentation source)",
+      "url": "https://raw.githubusercontent.com/nestjs/docs.nestjs.com/master/content/fundamentals/unit-testing.md",
+      "authority": "NestJS official documentation repository",
+      "stability": "volatile",
+      "last_verified": "2026-09-12",
+      "applicable_version": "Default-branch v12-era documentation as retrieved 2026-09-12; not a pinned release"
+    },
+    {
+      "id": "nestjs-configuration",
+      "title": "NestJS configuration (official documentation source)",
+      "url": "https://raw.githubusercontent.com/nestjs/docs.nestjs.com/master/content/techniques/configuration.md",
+      "authority": "NestJS official documentation repository",
+      "stability": "volatile",
+      "last_verified": "2026-09-12",
+      "applicable_version": "Default-branch v12-era documentation as retrieved 2026-09-12; match @nestjs/config version separately"
     }
   ]
 }
