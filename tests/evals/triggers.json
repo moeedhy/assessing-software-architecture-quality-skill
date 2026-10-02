@@ -1,0 +1,110 @@
+[
+  {
+    "id": "T01",
+    "should_trigger": true,
+    "query": "we've got checkout in services/checkout and the same pricing rules copy-pasted into invoices/promo.ts and promotions/handler.ts. last quarter pricing changed about 40 times and every change hits a bunch of modules. should we split a pricing microservice or not?",
+    "rationale": "Coupling, change amplification, and a split decision are architecture assessment even though the user never says architecture."
+  },
+  {
+    "id": "T02",
+    "should_trigger": true,
+    "query": "can you review the module boundaries in our NestJS app? BillingModule and OrdersModule forwardRef each other, and the worker host in apps/worker/main.ts never calls app.close. I can't tell if the boundary is wrong or if this is just DI noise.",
+    "rationale": "Framework fit and lifecycle semantics that can change an architecture recommendation."
+  },
+  {
+    "id": "T03",
+    "should_trigger": true,
+    "query": "our payments agent retries the charge tool whenever the model call times out. the card provider may already have captured the payment. is that an architecture problem in the tool boundary, or just a prompt tweak?",
+    "rationale": "AI-system side effects, idempotency, and failure containment are in scope."
+  },
+  {
+    "id": "T04",
+    "should_trigger": true,
+    "query": "before the acquisition the board wants a due diligence packet and an architecture health score for the whole platform. we can look at the repo, CI history, and last year's incidents. please score it.",
+    "rationale": "Explicit score plus whole-platform assurance is a DEEP architecture assessment."
+  },
+  {
+    "id": "T05",
+    "should_trigger": true,
+    "query": "plan a strangler migration off the legacy core in services/monolith. new orders should move first, and I don't want a rewrite pitch. what's the smallest sequence that stays reversible?",
+    "rationale": "Legacy modernization and reversibility are explicit triggers."
+  },
+  {
+    "id": "T06",
+    "should_trigger": true,
+    "query": "we had duplicate payouts on Friday. two workers both claimed the same payout row in the ledger. can you look at the architecture around that, not just the one-line bugfix?",
+    "rationale": "An architecture-related incident, not a routine defect fix."
+  },
+  {
+    "id": "T07",
+    "should_trigger": true,
+    "query": "every repository under src/persistence has an interface plus a single impl and we only have one database. is this over-engineered, or is the boundary earning its keep?",
+    "rationale": "Over-abstraction and whether a boundary pays for itself."
+  },
+  {
+    "id": "T08",
+    "should_trigger": true,
+    "query": "adding a promotion type historically touches 17 files across checkout, invoices, and the db migrations. is that a modularity problem we should fix, or is the spread justified?",
+    "rationale": "Change amplification is a named trigger."
+  },
+  {
+    "id": "T09",
+    "should_trigger": true,
+    "query": "write the ADR for whether catalog search stays a cache inside the monolith or becomes its own service. constraints: 3 engineers, one postgres, p99 is already fine, no separate team.",
+    "rationale": "An ADR decision with real constraints, not a blank template."
+  },
+  {
+    "id": "T10",
+    "should_trigger": false,
+    "query": "which ORM should I pick for a postgres app with about 40 tables, prisma or drizzle? just the library choice, the schema and service boundaries are already settled.",
+    "rationale": "Near miss: data-adjacent, but a library pick with boundaries already settled and no architectural tradeoff to assess."
+  },
+  {
+    "id": "T11",
+    "should_trigger": false,
+    "query": "give me a blank ADR template I can fill in later. don't assess our system and don't recommend an option.",
+    "rationale": "Near miss: ADR keyword, but they want a form, not a decision."
+  },
+  {
+    "id": "T12",
+    "should_trigger": false,
+    "query": "set up GitHub Actions so pull requests run pytest and fail if coverage drops. no architecture review, just the workflow file.",
+    "rationale": "Near miss: CI and coverage words, but the task is wiring a workflow file."
+  },
+  {
+    "id": "T13",
+    "should_trigger": false,
+    "query": "explain hexagonal architecture to me like I'm new to it. there is no codebase, I just want the idea and a sketch.",
+    "rationale": "Near miss: architecture vocabulary used as a teaching request, with no system to assess."
+  },
+  {
+    "id": "T14",
+    "should_trigger": false,
+    "query": "review this PR: calculateTax in src/tax/calculate.ts returns null when the rate is missing. it's a one-function bugfix and the design is not changing.",
+    "rationale": "Near miss: review keyword, but an isolated defect with no architectural tradeoff."
+  },
+  {
+    "id": "T15",
+    "should_trigger": false,
+    "query": "rename the local variable temp to label in formatAddress and run the formatter. nothing else in the file should change.",
+    "rationale": "Style and naming only."
+  },
+  {
+    "id": "T16",
+    "should_trigger": false,
+    "query": "add one shipping method to the ShippingMethod enum and the checkout form. the design is already settled, just implement it.",
+    "rationale": "Settled design, isolated implementation, no tradeoff."
+  },
+  {
+    "id": "T17",
+    "should_trigger": false,
+    "query": "how do I register a custom provider in NestJS? show a small @Injectable example with useFactory. I'm not asking you to review our modules.",
+    "rationale": "Near miss: NestJS is a profile this skill owns, but this is an API how-to, not a fit assessment."
+  },
+  {
+    "id": "T18",
+    "should_trigger": false,
+    "query": "write unit tests for parseInvoice in src/invoices/parse.ts. cover the empty-line case and a missing total. don't redesign the parser.",
+    "rationale": "Test writing for one function, not testability architecture."
+  }
+]
