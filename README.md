@@ -1,6 +1,31 @@
 # Assessing Software Architecture Quality
 
-A portable Agent Skill for evidence-led architecture decisions and reviews. Version 2.2 adds unscored framework-use guidance, a NestJS profile, conditional assessment methods, and resumable review context. The numerical model remains version 2.1 with 49 factors and unchanged scoring.
+Evidence-led architecture reviews for coding agents. It judges a system from corroborated evidence, withholds a score unless a full assessment can support one, and recommends the smallest reversible change.
+
+The agent-facing description lives in `SKILL.md` frontmatter. This file is for installing and releasing the package. Version 2.3 is the package. The numerical model remains version 2.1 with 49 factors and unchanged scoring.
+
+## Install
+
+This repository is one skill. The [skills CLI](https://github.com/vercel-labs/skills) installs it as `assessing-software-architecture-quality`, the `name` in `SKILL.md`, whatever the GitHub repository is called.
+
+```bash
+npx skills add moeedhy/assessing-software-architecture-quality-skill
+```
+
+Use `--global` to install for every project. The guidance has no runtime dependency. Validation and scoring need Python 3.10 or newer and only the standard library.
+
+A raw clone uses the repository folder name. Package validation requires the folder name to equal `name`, so rename that clone to `assessing-software-architecture-quality` before running the checks below.
+
+## Release
+
+There is no registry submission. A public GitHub repository is the release, and skills.sh lists the skill from install telemetry.
+
+1. Add a license file and set `license` in `SKILL.md`. This repository does not have one yet; do not publish it as reusable without one.
+2. Let GitHub Actions pass on the commit you intend to ship.
+3. Tag that commit `v2.3.0`, matching `metadata.version`, and attach the `package_digest.py` output to the GitHub release.
+4. Install once from a clean project and confirm the skill directory name.
+
+The evaluation matrix in `tests/evals.md` has not been run. Do not describe the package as behaviorally validated.
 
 ## What is included
 
@@ -8,6 +33,7 @@ A portable Agent Skill for evidence-led architecture decisions and reviews. Vers
 - `references/architecture-quality-model.json` — canonical IDs, weights, profiles, gates, and scoring thresholds.
 - `references/assessment-modes.md` — intent and TRIAGE/STANDARD/DEEP routing.
 - `references/evidence-contract.md` — traceable evidence, claim, and confidence rules.
+- `references/evidence-tooling.md` — commands and ecosystem tools for obtaining measurements.
 - `references/factors.md` — 49-factor interpretation catalog.
 - `references/weights.md` — optional scoring semantics and safeguards.
 - `references/review-protocol.md` — evidence-driven workflow.
@@ -19,7 +45,7 @@ A portable Agent Skill for evidence-led architecture decisions and reviews. Vers
 - `references/release.md` — validation, evaluation, package digest, and separate installation procedure.
 - `schemas/` — JSON Schemas for evidence, assessments, and deterministic results.
 - `scripts/architecture_quality.py` — standard-library package validation and opt-in scoring.
-- `tests/unit/` and `tests/evals/` — deterministic tests and machine-readable behavioral cases.
+- `tests/unit/` and `tests/evals/` — deterministic tests, behavioral cases, and near-miss activation probes.
 - `examples/assessment-template.json` — empty STANDARD checkpoint to copy and extend.
 - `examples/deep-assessment.json` — complete, scoreable DEEP assessment to copy from.
 - `examples/framework-review.json` — synthetic schema-2.1 checkpoint retaining unresolved version and architecture evidence.
@@ -34,10 +60,6 @@ The weights, multipliers, thresholds, and score bands are authored decision heur
 The composite is an ordinal scale rescaled to 0–100, **not a percentage**: uniform factor health `h` produces exactly `25h`, so a system whose every factor is Acceptable (2) scores 50 and lands in the **Adequate** band. Band labels use a vocabulary deliberately disjoint from the health-scale words, and the script reports `mean_health` (0–4) beside every composite.
 
 Framework leverage asks whether native features or custom behavior satisfy the actual requirements at lower total cost. It adds no factor or score, and unused capabilities are not defects. Assessment methods feed the same evidence and findings; mappings are authored interpretations, not compliance claims.
-
-## Install
-
-Copy the whole `assessing-software-architecture-quality/` directory into a skills-compatible location. Keep the directory name identical to the `name` in `SKILL.md`. The guidance has no runtime dependency; the optional CLI needs Python 3.10 or newer and only the standard library.
 
 ## Validate
 
@@ -74,4 +96,4 @@ Edit `references/architecture-quality-model.json` first when changing IDs or wei
 python3 scripts/architecture_quality.py sync-model-docs --check
 ```
 
-Behavioral release evaluation compares fresh-context no-skill, previous-v2.1, and candidate-v2.2 runs using independent grading. See [the evaluation protocol](tests/evals.md). The matrix remains **UNEXECUTED**; deterministic checks and code review are not behavioral release evidence. Installation is a separate action after reviewing [the release procedure](references/release.md).
+Behavioral release evaluation compares fresh-context no-skill, previous-v2.1, and candidate-v2.3 runs using independent grading. See [the evaluation protocol](tests/evals.md). The matrix remains **UNEXECUTED**; deterministic checks and code review are not behavioral release evidence. Installation is a separate action after reviewing [the release procedure](references/release.md).

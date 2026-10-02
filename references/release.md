@@ -1,8 +1,8 @@
 # Release and installed-copy verification
 
-The current package is candidate **2.2.0**. Its architecture quality model remains **2.1.0**, with **49 factors across eight domains**. Assessment schema **2.1** adds checkpoint support while retaining acceptance of legacy **2.0** assessments; score-result schema stays **2.0**. Package, model and schema versions describe different contracts and need not move together.
+The current package is candidate **2.3.0**. Its architecture quality model remains **2.1.0**, with **49 factors across eight domains**. Assessment schema **2.1** adds checkpoint support while retaining acceptance of legacy **2.0** assessments; score-result schema stays **2.0**. Package, model and schema versions describe different contracts and need not move together.
 
-Independent fresh-context behavioral evaluation has **not been run**. Follow [the evaluation protocol](../tests/evals.md) to compare `NO_SKILL`, `BASELINE_V2_1` and `CANDIDATE_V2_2`. Deterministic tests, author review and package validation are not behavioral evaluation. Candidate 2.2.0 must not be advertised as independently behaviorally validated until the documented matrix, blind grading and gates have completed.
+Independent fresh-context behavioral evaluation has **not been run**. Follow [the evaluation protocol](../tests/evals.md) to compare `NO_SKILL`, `BASELINE_V2_1` and `CANDIDATE_V2_3`. Deterministic tests, author review and package validation are not behavioral evaluation. Candidate 2.3.0 must not be advertised as independently behaviorally validated until the documented matrix, blind grading and gates have completed. The 2.2.0 package was not behaviorally validated either; do not treat it as a measured baseline.
 
 ## Local release checks
 
@@ -39,7 +39,7 @@ Installation is a separate user action. Preparing or checking this release does 
 python3 scripts/package_digest.py /path/to/frozen-release --compare /path/to/installed-skill
 ```
 
-Exit status is `0` for a match, `1` for a digest mismatch, and `2` for invalid or unreadable input. On mismatch, compare the output manifests and resolve the discrepancy before treating that install as the evaluated package. Then inspect the installed `SKILL.md` metadata for package `2.2.0`, model `2.1.0`, 49 factors and eight domains, and run package validation against that installed directory:
+Exit status is `0` for a match, `1` for a digest mismatch, and `2` for invalid or unreadable input. On mismatch, compare the output manifests and resolve the discrepancy before treating that install as the evaluated package. Then inspect the installed `SKILL.md` metadata for package `2.3.0`, model `2.1.0`, 49 factors and eight domains, and run package validation against that installed directory:
 
 ```sh
 python3 scripts/architecture_quality.py validate-package /path/to/installed-skill

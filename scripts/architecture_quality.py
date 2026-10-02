@@ -22,7 +22,7 @@ DOMAIN_IDS = tuple("ABCDEFGH")
 
 # Deliberate canary: bump only when the canonical model gains or loses a factor.
 EXPECTED_FACTORS = 49
-SKILL_VERSION = "2.2.0"
+SKILL_VERSION = "2.3.0"
 
 
 def load_json(path: Path) -> dict[str, Any]:
@@ -718,6 +718,47 @@ def validate_eval_cases(path: Path) -> int:
     return count
 
 
+def validate_trigger_cases(path: Path) -> int:
+    """Near-miss activation probes. Separate from cases.jsonl so content rubrics stay independent."""
+    if not path.exists():
+        raise ValueError(f"missing trigger corpus: {path}")
+    try:
+        cases = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        raise ValueError(f"invalid trigger corpus: {exc}") from exc
+    if not isinstance(cases, list):
+        raise ValueError("trigger corpus must be a JSON array")
+    ids: set[str] = set()
+    positives = negatives = 0
+    for index, case in enumerate(cases, 1):
+        if not isinstance(case, dict):
+            raise ValueError(f"trigger case {index} must be an object")
+        missing = [field for field in ("id", "query", "should_trigger", "rationale") if field not in case]
+        if missing:
+            raise ValueError(f"trigger case {index} missing fields: {', '.join(missing)}")
+        if not isinstance(case["id"], str) or not re.fullmatch(r"T\d{2,}", case["id"]):
+            raise ValueError(f"trigger case {index} has invalid id")
+        if case["id"] in ids:
+            raise ValueError(f"duplicate trigger id: {case['id']}")
+        ids.add(case["id"])
+        if not isinstance(case["query"], str) or len(case["query"].strip()) < 40:
+            raise ValueError(f"trigger {case['id']} query is too short to be a realistic probe")
+        if not isinstance(case["should_trigger"], bool):
+            raise ValueError(f"trigger {case['id']} should_trigger must be a boolean")
+        if not isinstance(case["rationale"], str) or not case["rationale"].strip():
+            raise ValueError(f"trigger {case['id']} requires a rationale")
+        if case["should_trigger"]:
+            positives += 1
+        else:
+            negatives += 1
+    if positives < 8 or negatives < 8:
+        raise ValueError(
+            "trigger corpus needs at least 8 positives and 8 negatives, "
+            f"found {positives} and {negatives}"
+        )
+    return len(cases)
+
+
 def check_model_docs(root: Path, model: dict[str, Any]) -> None:
     _, factors = flatten_model(model)
     factors_text = (root / "references" / "factors.md").read_text(encoding="utf-8")
@@ -834,6 +875,7 @@ def validate_package(root: Path) -> dict[str, Any]:
             raise ValueError(f"schema {schema.name} root type must be object")
 
     eval_count = validate_eval_cases(root / "tests" / "evals" / "cases.jsonl")
+    trigger_count = validate_trigger_cases(root / "tests" / "evals" / "triggers.json")
 
     sources = load_json(root / "references" / "sources.json")
     if sources.get("schema_version") != "1.0":
@@ -870,6 +912,7 @@ def validate_package(root: Path) -> dict[str, Any]:
         **model_summary,
         "schemas": len(schemas),
         "evals": eval_count,
+        "triggers": trigger_count,
         "sources": len(source_ids),
     }
 
@@ -910,7 +953,8 @@ def main(argv: list[str] | None = None) -> int:
             print(
                 "Package validation: OK "
                 f"({summary['domains']} domains, {summary['factors']} factors, "
-                f"{summary['evals']} evals, {summary['sources']} sources)"
+                f"{summary['evals']} evals, {summary['triggers']} trigger probes, "
+                f"{summary['sources']} sources)"
             )
             return 0
 

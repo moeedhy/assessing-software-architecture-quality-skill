@@ -1,5 +1,16 @@
 # Changelog
 
+## 2.3.0 — 2026-10-02
+
+- Broadened the activation description for AI systems, framework fit, due diligence, fitness functions, and over-engineering. The description states the capability and the triggers, not the workflow.
+- Inlined TRIAGE routing and its output shape in `SKILL.md`, and named the validation and scoring commands, the checkpoint template, and the worked review example.
+- Documented that UNKNOWN confidence applies to factor and gate judgments, not to evidence records.
+- Added an ADR-shaped DESIGN output, a rule for when to ask the user versus state an assumption, and an evidence-tooling menu so measurements are obtained rather than invented.
+- Treated agent instruction files as declared architecture rules under conformance, fitness functions, and governance, and recorded unit cost as runtime evidence.
+- Added a cheap behavioral micro-test tier and a near-miss trigger corpus. Full behavioral evaluation remains unexecuted.
+- Moved NestJS version dates into the provenance note. Recorded that SS-ISO/IEC 25010:2026 is a national adoption of ISO/IEC 25010:2023, not a new ISO edition.
+- Preserved numerical model `2.1.0`, all 49 factors and weights, score calculations, and scoring-result schema `2.0`.
+
 ## 2.2.0 — 2026-09-12
 
 - Added an unscored framework-use lens and NestJS profile: native semantic fit, avoidable duplication, misuse, justified customization, and unknowns; preserved required domain boundaries.

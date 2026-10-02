@@ -103,6 +103,19 @@ class PackageValidationTests(unittest.TestCase):
                 with self.subTest(value=value), self.assertRaises(ValueError):
                     aq.validate_eval_cases(path)
 
+    def test_trigger_probe_requires_boolean_and_coverage(self):
+        triggers = json.loads((ROOT / 'tests/evals/triggers.json').read_text())
+        self.assertGreaterEqual(sum(case['should_trigger'] for case in triggers), 8)
+        self.assertGreaterEqual(sum(not case['should_trigger'] for case in triggers), 8)
+        aq.validate_trigger_cases(ROOT / 'tests/evals/triggers.json')
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / 'triggers.json'
+            mutated = [dict(case) for case in triggers]
+            mutated[0]['should_trigger'] = 'yes'
+            path.write_text(json.dumps(mutated))
+            with self.assertRaisesRegex(ValueError, 'boolean'):
+                aq.validate_trigger_cases(path)
+
     def test_custom_weights_require_finite_numbers(self):
         for value in ('12.5', True, float('inf'), float('nan')):
             data = json.loads((ROOT / 'examples/deep-assessment.json').read_text())

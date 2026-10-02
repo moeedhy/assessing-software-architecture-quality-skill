@@ -2,6 +2,17 @@
 
 Use this as a concise interpretation guide. `weights.md` contains default weights.
 
+## Contents
+
+- A. Understandability
+- B. Modularity & Dependencies
+- C. Changeability & Evolvability
+- D. Distributed Coupling & Failure Containment
+- E. Runtime Quality
+- F. Engineering Capability
+- G. Domain & Organization
+- H. Governance & Security
+
 ## A. Understandability
 
 ### AQ-A01 — 1. Cognitive Load
@@ -139,10 +150,10 @@ Operators can explain novel runtime behavior using correlated traces, metrics, l
 Changes can be released and recovered with acceptable independence, batch size, coordination, and risk.
 
 ### AQ-F04 — 39. Architecture Conformance
-Actual implementation matches declared architectural boundaries/constraints. Trust implementation evidence over stale diagrams.
+Actual implementation matches declared architectural boundaries/constraints. Trust implementation evidence over stale diagrams. Declared rules include agent instruction files and repository conventions; conformance is whether the code follows them, not whether the file exists.
 
 ### AQ-F05 — 40. Architecture Fitness Functions
-Machine-verifiable checks continuously protect important architectural characteristics where practical.
+Machine-verifiable checks continuously protect important architectural characteristics where practical. A rule that exists only as prose for a coding agent is not a fitness function until a check fails when the rule is broken.
 
 ## G. Domain & Organization
 
@@ -167,7 +178,7 @@ Reachable capabilities available to attackers: entry points, privileged APIs, tr
 Extent to which compromise of one component/identity grants reach into others. Prefer least privilege, isolated credentials, and containment.
 
 ### AQ-H04 — 47. Continuous Architecture Governance
-Architecture decisions remain visible, owned, reviewed, threat-modeled when relevant, and continuously enforced/updated rather than periodically rediscovered.
+Architecture decisions remain visible, owned, reviewed, threat-modeled when relevant, and continuously enforced/updated rather than periodically rediscovered. Instruction files that tell coding agents the intended boundaries count only when those boundaries stay enforced as generated code changes.
 
 ### AQ-H05 — 48. Supply Chain & Build Integrity
 Trust in what actually reaches production: direct and transitive dependency risk, update latency for known-vulnerable dependencies, the build/release pipeline as a trust boundary, artifact provenance and signing, and who can inject code or configuration into a release. A compromised build path has system-wide blast radius regardless of application-level design.

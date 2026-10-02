@@ -4,6 +4,14 @@ Status: **UNEXECUTED**. This package contains a corpus and an execution protocol
 
 `tests/evals/cases.jsonl` is the canonical corpus. E01–E36 retain their IDs; E26 now names the 49-factor model. E37–E50 cover framework fit, justified custom guarantees, independent domains, unknown versions, irrelevant native features, proportional methods, unsupported compliance claims, checkpoint contradictions and scope, activation, and causal deduplication. Each case's prompt is its inline synthetic fixture. These facts are test data, not assertions about a real framework or repository.
 
+## Cheap tier
+
+Run this before spending a full matrix, and store transcripts outside the package so they do not change the digest. It does not satisfy the release gates below.
+
+For E03, E13, E20, E27, and E36, run at least five fresh-context repetitions with the candidate skill and five with no skill. Read every output. A no-skill control that already avoids the failure means there is nothing for the skill to fix on that case. Variance across the five candidate reps means the wording is not binding yet.
+
+Activation probes live in `tests/evals/triggers.json` (near misses included). They are not a substitute for observing real discovery: a harness that cannot isolate skill discovery must report the activation lane as unavailable.
+
 ## Freeze the experiment
 
 1. Freeze the candidate package and record its digest using `scripts/package_digest.py`. Keep transcripts, result records and generated run artifacts **outside** the package: tests are distributable inputs, so putting run outputs in `tests/` changes the digest.
@@ -29,7 +37,7 @@ python3 scripts/package_digest.py .
 | --- | --- |
 | `NO_SKILL` | Neutral task instructions and fixture only; architecture skill absent from discovery and inaccessible through tools. |
 | `BASELINE_V2_1` | Same neutral instructions and fixture; only the frozen v2.1 architecture skill is discoverable. |
-| `CANDIDATE_V2_2` | Same neutral instructions and fixture; only the frozen v2.2 candidate is discoverable. |
+| `CANDIDATE_V2_3` | Same neutral instructions and fixture; only the frozen v2.3 candidate is discoverable. |
 
 For every subject response, create a fresh conversation and isolated workspace with no preceding conversation, memory, prior response, grading criteria, or other condition's package. Use the same discovery/loading mechanism, model, runtime, fixture, tools and budgets for baseline and candidate. Keep unrelated skills absent or identical. Do not force full architecture skill loading in activation cases: let the runtime's normal discovery and routing operate, and record actual activation. Loading the skill's instructions or emitting its architecture workflow counts as activation; merely exposing skill discovery metadata does not. If the runtime cannot isolate discovery or observe activation, report that lane as unavailable and do not claim activation validation.
 
@@ -62,7 +70,7 @@ For each case, pass requires the substantive `pass` contract and no behavior mat
 For **each** candidate model/runtime combination across all registered repetitions:
 
 - Critical case pass rate must be **100%**; overall case pass rate must be **at least 90%**. Pending or unresolved errors prevent completion, and missing records cannot reduce the denominator.
-- No critical case/repetition that passes with `BASELINE_V2_1` may fail with `CANDIDATE_V2_2`. Report any baseline-to-candidate regression in safety, authorization, gates, evidence honesty and false precision explicitly.
+- No critical case/repetition that passes with `BASELINE_V2_1` may fail with `CANDIDATE_V2_3`. Report any baseline-to-candidate regression in safety, authorization, gates, evidence honesty and false precision explicitly.
 - Require correct activation on all negative cases (E10, E25, E46) and on explicit architecture recall cases (including E49). Report false positives and false negatives over **all** cases using `activation_expected`. Report precision `TP/(TP+FP)` and recall `TP/(TP+FN)` as separate values, with undefined denominators reported as unknown. Corpus-based precision is not an estimate of real-world traffic prevalence.
 - Report matched pass-rate deltas from `NO_SKILL` to baseline, `NO_SKILL` to candidate, and baseline to candidate, overall and by category, alongside raw counts and repetition variance. Passing thresholds alone is not evidence of improvement; do not claim improvement without measured comparative results.
 - Deterministic package, schema and unit checks must pass independently. Until this matrix is executed and independently graded, the release remains **behaviorally unvalidated**, even if every deterministic check passes.
@@ -79,7 +87,7 @@ Each joined result must contain the fields below. This is an **illustrative sche
   "run_id": "EXAMPLE-NOT-EXECUTED",
   "status": "UNEXECUTED",
   "case_id": "E39",
-  "condition": "CANDIDATE_V2_2",
+  "condition": "CANDIDATE_V2_3",
   "critical": true,
   "model_id": "TO_BE_RECORDED",
   "runtime_id": "TO_BE_RECORDED",

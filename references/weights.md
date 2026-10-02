@@ -1,5 +1,20 @@
 # Architecture Quality Weight Model
 
+## Contents
+
+- Status of these weights
+- Base domain weights
+- Factor weights
+- Why some weights are deliberately small
+- Health scale
+- Confidence scale
+- Applicability states
+- Evidence coverage
+- Weighted composite
+- Context profiles
+- Critical gates
+- Priority model
+
 ## Status of these weights
 
 These weights are **heuristic defaults authored for this skill**. They are not ISO, DORA, NIST, Sonar, AWS, Microsoft, or academic standard weights. Project-specific quality attributes and mandatory requirements take precedence.
@@ -144,7 +159,7 @@ Report confidence separately from health:
 - **HIGH** — multiple independent evidence channels or strong direct evidence plus corroboration.
 - **MEDIUM** — credible direct evidence but incomplete corroboration.
 - **LOW** — mostly inference, incomplete artifacts, or hypothetical design.
-- **UNKNOWN** — insufficient evidence.
+- **UNKNOWN** — insufficient evidence for a factor or gate judgment. Evidence records cannot use this value; see [the evidence contract](evidence-contract.md).
 
 Never mathematically blend confidence into health.
 
@@ -243,18 +258,6 @@ A diagnostic numerical score may be shown only as secondary information.
 
 ## Priority model
 
-Keep health and priority distinct. Prioritize using:
+Keep health and priority distinct. Prioritize using impact, change pressure, architectural reach, business criticality, and confidence.
 
-- impact,
-- change pressure,
-- architectural reach,
-- business criticality,
-- confidence.
-
-Recommended priority labels:
-
-- **P0** — critical gate or immediately unacceptable systemic risk.
-- **P1** — high impact plus high change pressure/criticality and broad reach.
-- **P2** — material risk with moderate change pressure or contained reach.
-- **P3** — localized improvement or low-change debt.
-- **P4** — cosmetic/optional improvement with weak economic justification.
+Priority labels P0–P4 are defined once, in the [report contract](report-contract.md).

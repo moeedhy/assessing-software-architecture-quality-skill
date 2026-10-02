@@ -36,10 +36,4 @@ Use when the user explicitly asks for a full assessment, benchmark, due-diligenc
 
 ## Selection examples
 
-| Request | Route |
-|---|---|
-| “Does this module split make sense?” | DESIGN or CHANGE + TRIAGE |
-| “Review our checkout architecture” | REVIEW + STANDARD |
-| “Score the whole platform for acquisition due diligence” | REVIEW + DEEP + score requested |
-| “Why did duplicate payouts occur?” | INCIDENT + TRIAGE, deepen data-integrity/recovery lanes |
-| “Plan a strangler migration from the legacy core” | MODERNIZATION + STANDARD |
+Worked routes are listed in `SKILL.md`, which is already loaded when this file is read. Do not invent a third intent or a fourth depth.

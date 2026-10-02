@@ -42,7 +42,7 @@ Use context for users, external systems, and scope; container for applications, 
 
 ## Provider-specific Well-Architected review
 
-First establish provider, actual services, deployment topology, workload requirements, and available operational evidence. Select that provider's current official framework and only relevant pillars/questions. AWS is the initial worked example here; do not treat its question IDs, service assumptions, or prescriptions as Azure/GCP guidance. For another provider, obtain its sources or mark the provider-specific lane UNKNOWN. Shared principles can still inform existing factors if labeled as general reasoning.
+First establish provider, actual services, deployment topology, workload requirements, and available operational evidence. Select that provider's current official framework and only relevant pillars/questions. AWS is the initial worked example here; do not treat its question IDs, service assumptions, or prescriptions as Azure/GCP guidance. For another provider, obtain its sources or mark the provider-specific lane UNKNOWN. Shared principles can still inform existing factors if labeled as general reasoning. When that framework asks about cost, record unit economics. Meeting a reliability target only at an unsustainable cost per request is a tradeoff to surface, not a silent pass.
 
 AWS describes its framework as guidance for architectural decisions on AWS, including operational and quality tradeoffs, rather than an audit mechanism. [AWS Well-Architected Framework](https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html).
 

@@ -1,6 +1,18 @@
 # Architecture Assessment Output Contract
 
-Lead with the decision. Scale the output to the selected depth and user request; do not emit empty ceremonial sections.
+Lead with the decision. Scale the output to the selected depth and user request; do not emit empty ceremonial sections. Priority labels below are the single definition; [weights](weights.md) points here.
+
+## DESIGN intent
+
+Whatever the depth, a DESIGN result is an ADR, not an observation of production. Include:
+
+1. Context — requirements, constraints, assumptions, and unknowns.
+2. Options — at least two, including keep-and-constrain when credible.
+3. Decision — the smallest reversible choice, and why it is sufficient now.
+4. Consequences — what gets harder, and which evidence would reopen the decision.
+5. Enforcement — the fitness function or check that will prove the decision once built.
+
+Do not fill operational factors with invented churn, incidents, or cost. A requested composite is Design Readiness. At TRIAGE, keep the five TRIAGE items and use the decision item to name the option chosen and the option rejected. At STANDARD or DEEP, include the five items above inside that depth's contract.
 
 ## TRIAGE
 

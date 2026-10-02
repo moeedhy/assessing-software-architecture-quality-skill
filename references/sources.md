@@ -31,6 +31,8 @@ Re-check volatile sources before making “current/latest” claims. The earlier
 
 On 2026-09-12, ISO's public page again showed ISO/IEC 25010:2023, edition 2, as published; its public abstract supports scope and edition, not a complete clause-level crosswalk. AWS fault-isolation guidance was also reopened. Other existing entries retain their prior verification dates.
 
+On 2026-10-02 the ISO catalogue still showed ISO/IEC 25010:2023 as Edition 2, published 2023. SS-ISO/IEC 25010:2026 is a Swedish national adoption identical to that edition, not a new ISO product-quality model. Do not retarget the crosswalk to a 2026 ISO edition.
+
 ## Conditional assessment methods
 
 - [SEI, ATAM: Method for Architecture Evaluation](https://www.sei.cmu.edu/library/atam-method-for-architecture-evaluation/) — CMU/SEI-2000-TR-004 (2000). The skill uses a lightweight ATAM-inspired adaptation, not the complete formal method.

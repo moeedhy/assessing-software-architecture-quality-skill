@@ -1,6 +1,6 @@
 # NestJS assessment profile
 
-Apply the [framework-use lens](framework-leverage.md) to the NestJS hosts actually in scope. This is an unscored profile using the existing 49 factors. The official [migration guide](https://docs.nestjs.com/migration-guide), checked 2026-09-12, describes v11 to v12; current documentation is a starting point, not proof of the repository's version. Resolve Nest core/common, platform adapter, testing, and used integration-package versions separately. Check version-specific migration notes before asserting lifecycle ordering or API defaults.
+Apply the [framework-use lens](framework-leverage.md) to the NestJS hosts actually in scope. This is an unscored profile using the existing 49 factors. Official documentation is a starting point, not proof of the repository's version; verification dates live in [sources](sources.md). Resolve Nest core/common, platform adapter, testing, and used integration-package versions separately. Check the migration notes for those resolved versions before asserting lifecycle ordering or API defaults.
 
 ## Inspect only relevant capability lanes
 

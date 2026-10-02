@@ -50,6 +50,7 @@ Change Amplification counts the files, modules, repositories, services, schemas,
 - Recovery: backups alone are insufficient; verify restore, RTO/RPO, ordering, and exercises.
 - Observability: operators should explain what failed, where, for whom, why, in which version, and along which path.
 - Delivery metrics: assess a service/application delivery system and trends, never individual developer productivity.
+- Cost: record cost per request, tenant, or workflow when it could change the choice. Meeting an SLO only at an unsustainable unit cost is not yet acceptable.
 
 ### Testability and AI evaluation
 

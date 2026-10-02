@@ -13,6 +13,8 @@ Every consequential finding must be traceable to evidence. Use `schemas/evidence
 
 These dimensions are not interchangeable. A documented claim can be directly observed as a document yet still provide weak evidence that the implementation behaves as claimed.
 
+Confidence on an evidence record is only LOW, MEDIUM, or HIGH. A record exists because there is something to judge; `schemas/evidence.schema.json` rejects UNKNOWN there. UNKNOWN confidence belongs to factor and gate judgments when the applicable evidence is insufficient to rate health. Do not invent a measurement and mark it low-confidence. Omit it, and mark the factor UNKNOWN.
+
 ## Minimum evidence record
 
 ```json
